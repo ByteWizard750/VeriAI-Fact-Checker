@@ -1,0 +1,129 @@
+FAKE NEWS DETECTOR - TEST EXAMPLES
+=====================================
+
+Copy and paste these examples into the web interface at http://localhost:5000
+
+═══════════════════════════════════════════════════════════════
+FAKE NEWS EXAMPLES (Should be detected as FAKE)
+═══════════════════════════════════════════════════════════════
+
+Example 1 - Conspiracy Theory:
+BREAKING: Scientists have discovered that drinking water causes 100% mortality rate! Every person who has ever consumed H2O has died or will die. The government doesn't want you to know this shocking truth! Stop drinking water immediately and switch to our special alternative beverage.
+
+Example 2 - Sensationalist Fake:
+SHOCKING REVELATION: The moon landing was completely faked! NASA has been lying to us for decades. Real astronauts never went to space - it was all filmed in a Hollywood studio. This explosive secret has been hidden by the government and media elites.
+
+Example 3 - Health Scare:
+URGENT WARNING: Your smartphone is emitting dangerous radiation that causes brain cancer! Studies show that 99% of people who use phones develop tumors within 6 months. The tech companies know this but refuse to tell you. Protect yourself now by buying our special phone case!
+
+Example 4 - Political Misinformation:
+EXCLUSIVE: The president was caught on tape admitting to massive election fraud! Sources reveal that millions of fake votes were cast in the last election. This explosive evidence will change everything. Share this immediately before they delete it!
+
+Example 5 - Financial Scam:
+INCREDIBLE OPPORTUNITY: Make $10,000 in 24 hours with this one simple trick! Financial experts don't want you to know this secret method. Just send $500 to our account and we'll show you how to become a millionaire overnight. No experience needed!
+
+═══════════════════════════════════════════════════════════════
+LEGITIMATE NEWS EXAMPLES (Should be detected as TRUE)
+═══════════════════════════════════════════════════════════════
+
+Example 1 - Science News:
+The Federal Reserve announced today that it will maintain interest rates at their current level, citing ongoing economic uncertainty and inflation concerns. The decision was made following a two-day meeting of the Federal Open Market Committee. Analysts had widely expected the central bank to hold rates steady given recent economic indicators.
+
+Example 2 - Technology News:
+Apple Inc. reported record quarterly earnings, with iPhone sales exceeding expectations despite global supply chain challenges. The company's revenue reached $94.8 billion, representing a 3% increase from the previous year. CEO Tim Cook attributed the strong performance to robust demand for the latest iPhone models and growth in services revenue.
+
+Example 3 - Health News:
+The World Health Organization released new guidelines recommending at least 150 minutes of moderate-intensity physical activity per week for adults. The updated recommendations are based on extensive research showing that regular exercise reduces the risk of cardiovascular disease, diabetes, and certain types of cancer. Health experts emphasize that any amount of physical activity is better than none.
+
+Example 4 - Education News:
+Harvard University announced a new scholarship program that will cover full tuition for students from families earning less than $75,000 per year. The initiative aims to increase access to higher education for low-income students. The university expects this program to benefit approximately 1,000 students annually.
+
+Example 5 - Climate News:
+The United Nations Climate Change Conference concluded with 195 countries agreeing to accelerate efforts to reduce greenhouse gas emissions. The agreement includes commitments to phase out coal-fired power plants and increase investments in renewable energy. Scientists warn that immediate action is necessary to limit global warming to 1.5 degrees Celsius.
+
+═══════════════════════════════════════════════════════════════
+EDGE CASES (Interesting to test)
+═══════════════════════════════════════════════════════════════
+
+Example 1 - Satire (May be detected as Fake, which is correct):
+The Onion reports: Local man discovers that his reflection in the mirror has been secretly judging him for years. "I always thought we had a good relationship," said the man, "but apparently my reflection has been making fun of my fashion choices behind my back."
+
+Example 2 - Opinion Piece (May vary):
+In my opinion, the current education system needs significant reform. While standardized testing has its place, we should focus more on developing critical thinking skills and creativity in students. The emphasis on memorization over understanding is holding back our next generation.
+
+Example 3 - Mixed Content:
+Breaking news: A new study published in Nature suggests that regular exercise may improve cognitive function in older adults. However, some critics argue that the sample size was too small and the results need to be replicated. The researchers maintain that their findings are significant and warrant further investigation.
+
+Example 4 - Clickbait Headline:
+You won't believe what happened next! This one weird trick will change your life forever. Doctors hate him! Click here to find out the secret that billionaires don't want you to know.
+
+Example 5 - Misleading Statistics:
+STUDY PROVES: 95% of people who eat vegetables die within 100 years! The research clearly shows that vegetable consumption is linked to mortality. Scientists are shocked by these findings that the mainstream media refuses to report.
+
+═══════════════════════════════════════════════════════════════
+MORE REALISTIC FAKE NEWS EXAMPLES
+═══════════════════════════════════════════════════════════════
+
+Example 6 - Medical Misinformation:
+A new study reveals that vaccines contain microchips designed to track your movements. Doctors are being paid by pharmaceutical companies to inject these tracking devices into children. The government is using this technology to monitor citizens without their knowledge. Share this before they remove it!
+
+Example 7 - Celebrity Death Hoax:
+BREAKING: Beloved actor Tom Hanks has passed away at age 67. Sources close to the family confirm he died from complications related to a recent surgery. The entertainment industry is in mourning. This tragic news is being suppressed by mainstream media.
+
+Example 8 - Economic Fear-Mongering:
+ECONOMIC COLLAPSE IMMINENT: Financial experts warn that the stock market will crash by 80% next week. Banks are preparing to close their doors permanently. Withdraw all your money immediately before it's too late. This information comes from anonymous sources within the Federal Reserve.
+
+Example 9 - Social Media Hoax:
+URGENT: Facebook is deleting all accounts tomorrow! Mark Zuckerberg announced that the platform will shut down permanently. Download all your photos and contacts now before they're lost forever. This is your last chance - share with everyone you know!
+
+Example 10 - Product Scam:
+MIRACLE CURE: This ancient herb from the Amazon rainforest cures cancer, diabetes, and heart disease in just 3 days! Big Pharma has been hiding this secret for decades. Order now for just $99.99 and get a second bottle free. Limited time offer - act fast!
+
+═══════════════════════════════════════════════════════════════
+MORE REALISTIC TRUE NEWS EXAMPLES
+═══════════════════════════════════════════════════════════════
+
+Example 6 - Business News:
+Microsoft Corporation announced plans to invest $10 billion in artificial intelligence research over the next five years. The investment will focus on developing AI tools for businesses and expanding cloud computing capabilities. CEO Satya Nadella stated that AI represents the next major computing platform.
+
+Example 7 - International News:
+The European Union reached a trade agreement with several Southeast Asian nations, reducing tariffs on agricultural products and technology exports. The deal is expected to boost economic cooperation and create thousands of jobs across member countries. The agreement will take effect next year after ratification by all parties.
+
+Example 8 - Sports News:
+The Los Angeles Lakers defeated the Boston Celtics 112-108 in overtime last night, extending their winning streak to five games. Star player LeBron James scored 35 points and recorded 12 assists. The team's improved defense has been credited for their recent success, according to head coach Darvin Ham.
+
+Example 9 - Science News:
+Researchers at MIT published a study in the journal Science demonstrating a new method for converting carbon dioxide into useful chemicals using solar energy. The breakthrough could help reduce greenhouse gas emissions while producing valuable industrial materials. The process is still in early stages but shows promising results in laboratory tests.
+
+Example 10 - Local News:
+The city council approved a $50 million budget for improving public transportation infrastructure. The funds will be used to upgrade bus routes, add new bike lanes, and expand the subway system. Construction is expected to begin next spring and will create approximately 500 jobs. The project is funded through a combination of federal grants and local taxes.
+
+═══════════════════════════════════════════════════════════════
+QUICK TEST EXAMPLES (Short snippets)
+═══════════════════════════════════════════════════════════════
+
+FAKE (Short):
+Scientists discover that breathing air causes aging! Stop breathing now to stay young forever!
+
+TRUE (Short):
+The National Weather Service issued a winter storm warning for the Northeast region, predicting up to 12 inches of snow over the next 24 hours.
+
+FAKE (Medium):
+EXCLUSIVE: The government is secretly adding mind-control chemicals to tap water. Independent researchers have confirmed this shocking discovery. Protect your family by buying our special water filters today!
+
+TRUE (Medium):
+The Department of Education released new statistics showing that high school graduation rates have increased to 88% nationwide, the highest level in decades. Education Secretary Miguel Cardona credited the improvement to increased federal funding and support programs.
+
+═══════════════════════════════════════════════════════════════
+TESTING TIPS
+═══════════════════════════════════════════════════════════════
+
+1. Try copying the full text of each example
+2. Test with shorter versions (just headlines)
+3. Test with longer versions (add more context)
+4. Mix fake and true elements to see how the model handles ambiguity
+5. Check the SHAP explanations to understand which words/phrases influenced the prediction
+6. Look at the confidence scores - higher confidence usually means clearer indicators
+
+═══════════════════════════════════════════════════════════════
+

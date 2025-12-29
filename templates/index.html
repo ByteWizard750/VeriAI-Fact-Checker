@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-white mb-3">
+                <i class="fas fa-shield-alt me-3"></i>
+                Fake News Detector
+            </h1>
+            <p class="lead text-white-50">
+                Analyze news articles and statements using advanced AI to detect misinformation with detailed explanations
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-4">
+                <form id="newsForm">
+                    <div class="mb-4">
+                        <label for="newsText" class="form-label fw-bold">
+                            <i class="fas fa-newspaper me-2"></i>
+                            Enter News Text or Article
+                        </label>
+                        <textarea 
+                            class="form-control" 
+                            id="newsText" 
+                            rows="8" 
+                            placeholder="Paste your news article, headline, or statement here for analysis..."
+                            required
+                        ></textarea>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            The more text you provide, the more accurate the analysis will be.
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button type="submit" class="btn btn-primary btn-lg me-md-2" id="analyzeBtn">
+                            <i class="fas fa-search me-2"></i>
+                            Analyze News
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-lg" id="clearBtn">
+                            <i class="fas fa-eraser me-2"></i>
+                            Clear
+                        </button>
+                    </div>
+
+                    <div class="loading text-center mt-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Analyzing text with AI model...</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" style="display: none;">
+            <div class="card result-card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="card-title mb-3">
+                                <i class="fas fa-chart-line me-2"></i>
+                                Analysis Results
+                            </h4>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold">Prediction:</span>
+                                    <span id="prediction" class="badge fs-6"></span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold">Confidence:</span>
+                                    <span id="confidence" class="fw-bold"></span>
+                                </div>
+                                
+                                <div class="confidence-bar mb-3">
+                                    <div id="confidenceBar" class="confidence-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="p-3 rounded bg-light">
+                                        <h6 class="text-danger mb-1">Fake Probability</h6>
+                                        <span id="fakeProbability" class="h5 text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 rounded bg-light">
+                                        <h6 class="text-success mb-1">True Probability</h6>
+                                        <span id="trueProbability" class="h5 text-success"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4 class="card-title mb-3">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                Why This Prediction?
+                            </h4>
+                            <div id="explanationText" class="mb-3"></div>
+                            <div id="topFeatures"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHAP Visualization -->
+            <div class="card result-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Feature Importance Analysis (SHAP)
+                    </h4>
+                    <div id="shapChart"></div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <strong>Green bars</strong> indicate features that support the "True" classification, 
+                            while <strong>red bars</strong> indicate features that support the "Fake" classification.
+                            The length of each bar represents the strength of that feature's influence.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sample Examples -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    Try These Examples
+                </h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 border rounded example-text" style="cursor: pointer;">
+                            <h6 class="text-success">Legitimate News Example</h6>
+                            <p class="small mb-0">
+                                "The Federal Reserve announced today that it will maintain interest rates at their current level, 
+                                citing ongoing economic uncertainty and inflation concerns. The decision was made following a 
+                                two-day meeting of the Federal Open Market Committee."
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 border rounded example-text" style="cursor: pointer;">
+                            <h6 class="text-danger">Suspicious News Example</h6>
+                            <p class="small mb-0">
+                                "BREAKING: Scientists have discovered that drinking water causes 100% mortality rate! 
+                                Every person who has ever consumed H2O has died or will die. The government doesn't 
+                                want you to know this shocking truth!"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('newsForm');
+    const textArea = document.getElementById('newsText');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const loading = document.querySelector('.loading');
+    const results = document.getElementById('results');
+    const examples = document.querySelectorAll('.example-text');
+
+    // Handle form submission
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const text = textArea.value.trim();
+        if (!text) {
+            alert('Please enter some text to analyze.');
+            return;
+        }
+
+        // Show loading state
+        analyzeBtn.disabled = true;
+        loading.style.display = 'block';
+        results.style.display = 'none';
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                displayResults(data);
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (error) {
+            alert('An error occurred: ' + error.message);
+        } finally {
+            analyzeBtn.disabled = false;
+            loading.style.display = 'none';
+        }
+    });
+
+    // Clear button
+    clearBtn.addEventListener('click', function() {
+        textArea.value = '';
+        results.style.display = 'none';
+    });
+
+    // Example text click handlers
+    examples.forEach(example => {
+        example.addEventListener('click', function() {
+            const text = this.querySelector('p').textContent;
+            textArea.value = text;
+            textArea.focus();
+        });
+    });
+
+    function displayResults(data) {
+        // Update prediction
+        const predictionElement = document.getElementById('prediction');
+        predictionElement.textContent = data.prediction;
+        predictionElement.className = `badge fs-6 ${data.prediction === 'Fake' ? 'bg-danger' : 'bg-success'}`;
+
+        // Update confidence
+        document.getElementById('confidence').textContent = data.confidence + '%';
+        
+        // Update confidence bar
+        const confidenceBar = document.getElementById('confidenceBar');
+        confidenceBar.style.width = data.confidence + '%';
+        confidenceBar.style.backgroundColor = data.prediction === 'Fake' ? '#dc3545' : '#28a745';
+
+        // Update probabilities
+        document.getElementById('fakeProbability').textContent = data.probabilities.fake + '%';
+        document.getElementById('trueProbability').textContent = data.probabilities.true + '%';
+
+        // Update result card styling
+        const resultCard = document.querySelector('.result-card');
+        resultCard.className = `card result-card ${data.prediction === 'Fake' ? 'fake-result' : 'true-result'}`;
+
+        // Update explanation
+        const explanationText = document.getElementById('explanationText');
+        explanationText.innerHTML = `
+            <p class="mb-2">
+                The model classified this text as <strong>${data.prediction.toLowerCase()}</strong> 
+                with <strong>${data.confidence}% confidence</strong>.
+            </p>
+            <p class="small text-muted">
+                This prediction is based on analyzing various linguistic features, patterns, 
+                and characteristics commonly found in ${data.prediction.toLowerCase()} news.
+            </p>
+        `;
+
+        // Display top features
+        const topFeatures = document.getElementById('topFeatures');
+        if (data.explanation && data.explanation.length > 0) {
+            let featuresHtml = '<h6 class="mb-2">Top Contributing Features:</h6>';
+            data.explanation.slice(0, 5).forEach(([feature, importance]) => {
+                const isPositive = importance > 0;
+                featuresHtml += `
+                    <div class="feature-item ${isPositive ? 'feature-positive' : 'feature-negative'}">
+                        <div class="d-flex justify-content-between">
+                            <span class="small">${feature}</span>
+                            <span class="small fw-bold ${isPositive ? 'text-success' : 'text-danger'}">
+                                ${importance > 0 ? '+' : ''}${importance.toFixed(4)}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+            topFeatures.innerHTML = featuresHtml;
+        }
+
+        // Display SHAP chart
+        if (data.chart) {
+            const chartData = JSON.parse(data.chart);
+            Plotly.newPlot('shapChart', chartData.data, chartData.layout, {responsive: true});
+        }
+
+        // Show results
+        results.style.display = 'block';
+        results.scrollIntoView({ behavior: 'smooth' });
+    }
+});
+</script>
+{% endblock %}

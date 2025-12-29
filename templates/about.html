@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}About - Fake News Detector{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-white mb-3">
+                <i class="fas fa-info-circle me-3"></i>
+                About Fake News Detector
+            </h1>
+            <p class="lead text-white-50">
+                Understanding how our AI-powered fake news detection system works
+            </p>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <h3 class="card-title mb-4">
+                    <i class="fas fa-bullseye me-2"></i>
+                    Project Overview
+                </h3>
+                <p class="lead">
+                    This Fake News Detector is an advanced machine learning system designed to identify 
+                    potentially false or misleading news articles and statements using state-of-the-art 
+                    natural language processing techniques.
+                </p>
+                <p>
+                    The system combines multiple datasets and employs sophisticated algorithms to analyze 
+                    text patterns, linguistic features, and content characteristics that are commonly 
+                    associated with fake news versus legitimate journalism.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-database me-2 text-primary"></i>
+                            Datasets Used
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>News Dataset:</strong> 44,000+ articles from reliable and unreliable sources
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>LIAR Dataset:</strong> 12,800+ fact-checked statements from PolitiFact
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Combined Training:</strong> Over 50,000 labeled examples
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-cogs me-2 text-primary"></i>
+                            Machine Learning Models
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Random Forest:</strong> Ensemble learning for robust predictions
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>XGBoost:</strong> Gradient boosting for high accuracy
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Logistic Regression:</strong> Linear model for interpretability
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>LightGBM:</strong> Fast gradient boosting framework
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title mb-4">
+                    <i class="fas fa-search me-2 text-primary"></i>
+                    How It Works
+                </h4>
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="p-3">
+                            <i class="fas fa-file-text fa-3x text-primary mb-3"></i>
+                            <h6>1. Text Input</h6>
+                            <p class="small text-muted">User provides news article or statement</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="p-3">
+                            <i class="fas fa-filter fa-3x text-info mb-3"></i>
+                            <h6>2. Preprocessing</h6>
+                            <p class="small text-muted">Text cleaning, tokenization, and feature extraction</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="p-3">
+                            <i class="fas fa-brain fa-3x text-warning mb-3"></i>
+                            <h6>3. AI Analysis</h6>
+                            <p class="small text-muted">Machine learning model processes features</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="p-3">
+                            <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                            <h6>4. Results</h6>
+                            <p class="small text-muted">Prediction with confidence and explanations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title mb-4">
+                    <i class="fas fa-lightbulb me-2 text-primary"></i>
+                    SHAP Explainability
+                </h4>
+                <p>
+                    Our system uses <strong>SHAP (SHapley Additive exPlanations)</strong> to provide 
+                    transparent explanations for each prediction. SHAP values help you understand:
+                </p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-arrow-right text-success me-2"></i>
+                                Which words/features influenced the decision
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-arrow-right text-success me-2"></i>
+                                How much each feature contributed
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-arrow-right text-success me-2"></i>
+                                Whether features support "fake" or "true" classification
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-arrow-right text-success me-2"></i>
+                                Visual representation of feature importance
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                            Important Limitations
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-info-circle text-info me-2"></i>
+                                This tool is for educational and research purposes
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-info-circle text-info me-2"></i>
+                                Results should not be the sole basis for fact-checking
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-info-circle text-info me-2"></i>
+                                Always verify information through multiple reliable sources
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-info-circle text-info me-2"></i>
+                                Model performance may vary with different types of content
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-code me-2 text-primary"></i>
+                            Technical Stack
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fab fa-python text-warning me-2"></i>
+                                <strong>Python:</strong> Core programming language
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-flask text-success me-2"></i>
+                                <strong>Flask:</strong> Web framework
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-chart-bar text-info me-2"></i>
+                                <strong>Scikit-learn:</strong> Machine learning library
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-brain text-danger me-2"></i>
+                                <strong>SHAP:</strong> Model explainability
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-language text-primary me-2"></i>
+                                <strong>NLTK:</strong> Natural language processing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="card-title mb-3">
+                    <i class="fas fa-users me-2 text-primary"></i>
+                    Contributing to Media Literacy
+                </h4>
+                <p class="lead">
+                    This project aims to promote media literacy and critical thinking by providing 
+                    tools to help users evaluate news content more effectively.
+                </p>
+                <p class="text-muted">
+                    Remember: Technology is a tool to assist human judgment, not replace it. 
+                    Always think critically and verify information through multiple trusted sources.
+                </p>
+                <a href="/" class="btn btn-primary btn-lg mt-3">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Try the Detector
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
