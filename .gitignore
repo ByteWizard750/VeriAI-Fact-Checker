@@ -7,7 +7,13 @@ env/
 venv/
 ENV/
 
-# Data & Models (Optional - keep small models if needed)
+# Model Binaries & Datasets
+models/
+*.pkl
+*.joblib
+*.csv
+
+# Logs & Temporary Files
 *.log
 app_output.log
 
