@@ -99,27 +99,61 @@ def predict():
             ])
             
             fig.update_layout(
-                title='Top Features Contributing to Prediction',
-                xaxis_title='SHAP Value (Impact on Prediction)',
-                yaxis_title='Features',
-                height=400,
-                margin=dict(l=150, r=50, t=50, b=50)
+                title='Feature Impact on AI Model (Red = Promotional Risk | Green = Real News Style)',
+                xaxis_title='◄ Pushes Toward Fake / Risk  |  Pushes Toward Real News ►',
+                yaxis_title='Feature Terms',
+                height=380,
+                margin=dict(l=140, r=40, t=50, b=50)
             )
             
             chart_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
         else:
             chart_json = None
         
+        # Run live web fact check
+        try:
+            from fact_checker import verify_claim_live
+            live_check = verify_claim_live(text)
+        except Exception as fc_err:
+            print(f"Fact check error: {fc_err}")
+            live_check = {
+                'status': 'Check Failed',
+                'verdict_color': 'secondary',
+                'summary': 'Could not query live web search at this time.',
+                'sources': []
+            }
+            
+        # Compute Unified Final Verdict (combining AI Semantic Cross-Verification + Style Analysis)
+        if live_check.get('is_verified', False):
+            final_prediction = 'True'
+            verdict_reason = f"Verified as Genuine Real News confirmed by live news reports with {live_check.get('alignment_score', 95.0)}% semantic alignment."
+            display_confidence = 95.0
+        elif live_check['status'] in ['Unverified Claim / False Rumor', 'Unverified Rumor / Misinformation', 'Fact-Check Article Found']:
+            final_prediction = 'Fake'
+            verdict_reason = live_check['summary']
+            display_confidence = 90.0
+        else:
+            final_prediction = result['prediction']
+            verdict_reason = f"Classified as {result['prediction']} based on AI linguistic style and vocabulary analysis."
+            display_confidence = round(result['confidence'] * 100, 2)
+        
         return jsonify({
-            'prediction': result['prediction'],
-            'confidence': round(result['confidence'] * 100, 2),
+            'prediction': final_prediction,
+            'verdict_reason': verdict_reason,
+            'style_prediction': result['prediction'],
+            'confidence': display_confidence,
             'probabilities': {
-                'fake': round(result['probabilities']['fake'] * 100, 2),
-                'true': round(result['probabilities']['true'] * 100, 2)
+                'fake': 90.0 if final_prediction == 'Fake' else 10.0,
+                'true': 10.0 if final_prediction == 'Fake' else 90.0
             },
             'explanation': result['explanation'][:10],
-            'chart': chart_json
+            'chart': chart_json,
+            'live_fact_check': live_check
         })
+
+
+
         
     except Exception as e:
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
@@ -140,7 +174,9 @@ def about():
 if __name__ == '__main__':
     print("Initializing Fake News Detector...")
     if initialize_detector():
-        print("Starting Flask application...")
-        app.run(debug=True, host='0.0.0.0', port=5000)
+        port = int(os.environ.get('PORT', 5001))
+        print(f"Starting Flask application on port {port}...")
+        app.run(debug=True, host='0.0.0.0', port=port)
     else:
         print("Failed to initialize detector. Please train the model first.")
+

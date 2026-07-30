@@ -1,7 +1,17 @@
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
 .venv/
-.env
-*.log
-models/
-data/
+env/
+venv/
+ENV/
 
+# Data & Models (Optional - keep small models if needed)
+*.log
+app_output.log
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/

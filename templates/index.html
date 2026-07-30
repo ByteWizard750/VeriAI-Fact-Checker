@@ -2,165 +2,216 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-lg-10">
+    <div class="col-xl-10">
+        
+        <!-- Hero Section -->
         <div class="text-center mb-5">
-            <h1 class="display-4 fw-bold text-white mb-3">
-                <i class="fas fa-shield-alt me-3"></i>
-                Fake News Detector
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill bg-dark border border-secondary text-secondary mb-3">
+                <i class="fas fa-bolt text-cyan" style="color: #38bdf8;"></i>
+                <span class="small fw-semibold text-light">Real-Time Search + Semantic NLI Entailment Engine</span>
+            </div>
+            
+            <h1 class="display-4 fw-bold text-white mb-3" style="font-family: 'Outfit', sans-serif; letter-spacing: -0.5px;">
+                Instant News & Rumor Verification
             </h1>
-            <p class="lead text-white-50">
-                Analyze news articles and statements using advanced AI to detect misinformation with detailed explanations
+            
+            <p class="lead text-secondary mx-auto" style="max-width: 680px; font-size: 1.15rem;">
+                Cross-references news headlines, claims, and viral posts against <strong>50,000+ live RSS news feeds</strong>, evaluating subject entities, release dates, and linguistic patterns.
             </p>
         </div>
 
-        <div class="card">
-            <div class="card-body p-4">
-                <form id="newsForm">
-                    <div class="mb-4">
-                        <label for="newsText" class="form-label fw-bold">
-                            <i class="fas fa-newspaper me-2"></i>
-                            Enter News Text or Article
+        <!-- Main Input Form Card -->
+        <div class="glass-card p-4 p-md-5 mb-5">
+            <form id="newsForm">
+                <div class="mb-4 position-relative">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label for="newsText" class="form-label fw-bold text-white mb-0 d-flex align-items-center gap-2">
+                            <i class="fas fa-quote-left text-cyan" style="color: #38bdf8;"></i> Paste News Headline, Claim, or Article
                         </label>
-                        <textarea 
-                            class="form-control" 
-                            id="newsText" 
-                            rows="8" 
-                            placeholder="Paste your news article, headline, or statement here for analysis..."
-                            required
-                        ></textarea>
-                        <div class="form-text">
-                            <i class="fas fa-info-circle me-1"></i>
-                            The more text you provide, the more accurate the analysis will be.
-                        </div>
-                    </div>
-
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                        <button type="submit" class="btn btn-primary btn-lg me-md-2" id="analyzeBtn">
-                            <i class="fas fa-search me-2"></i>
-                            Analyze News
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary btn-lg" id="clearBtn">
-                            <i class="fas fa-eraser me-2"></i>
-                            Clear
+                        <button type="button" class="btn btn-sm btn-dark border border-secondary text-secondary rounded-pill px-3" id="pasteBtn">
+                            <i class="fas fa-paste me-1"></i> Quick Paste
                         </button>
                     </div>
-
-                    <div class="loading text-center mt-3">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p class="mt-2 text-muted">Analyzing text with AI model...</p>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div id="results" style="display: none;">
-            <div class="card result-card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="card-title mb-3">
-                                <i class="fas fa-chart-line me-2"></i>
-                                Analysis Results
-                            </h4>
-                            
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="fw-bold">Prediction:</span>
-                                    <span id="prediction" class="badge fs-6"></span>
-                                </div>
-                                
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="fw-bold">Confidence:</span>
-                                    <span id="confidence" class="fw-bold"></span>
-                                </div>
-                                
-                                <div class="confidence-bar mb-3">
-                                    <div id="confidenceBar" class="confidence-fill"></div>
-                                </div>
-                            </div>
-
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <div class="p-3 rounded bg-light">
-                                        <h6 class="text-danger mb-1">Fake Probability</h6>
-                                        <span id="fakeProbability" class="h5 text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="p-3 rounded bg-light">
-                                        <h6 class="text-success mb-1">True Probability</h6>
-                                        <span id="trueProbability" class="h5 text-success"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h4 class="card-title mb-3">
-                                <i class="fas fa-lightbulb me-2"></i>
-                                Why This Prediction?
-                            </h4>
-                            <div id="explanationText" class="mb-3"></div>
-                            <div id="topFeatures"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SHAP Visualization -->
-            <div class="card result-card">
-                <div class="card-body">
-                    <h4 class="card-title mb-3">
-                        <i class="fas fa-chart-bar me-2"></i>
-                        Feature Importance Analysis (SHAP)
-                    </h4>
-                    <div id="shapChart"></div>
-                    <div class="mt-3">
-                        <small class="text-muted">
-                            <i class="fas fa-info-circle me-1"></i>
-                            <strong>Green bars</strong> indicate features that support the "True" classification, 
-                            while <strong>red bars</strong> indicate features that support the "Fake" classification.
-                            The length of each bar represents the strength of that feature's influence.
+                    
+                    <textarea 
+                        class="form-control form-control-dark" 
+                        id="newsText" 
+                        rows="5" 
+                        placeholder="e.g. 'Ajinkya Rahane announces retirement from cricket' or 'Airtel to give free Gemini Pro for 1 year' or 'Adarsha kutumbam release date on oct 2'..."
+                        required
+                    ></textarea>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+                        <small class="text-secondary" style="font-size: 0.8rem;">
+                            <i class="fas fa-shield-check me-1 text-emerald" style="color: #10b981;"></i> Analyzes entities, temporal dates, and live web press releases
                         </small>
+                        <small class="text-secondary fw-semibold" id="charCounter" style="font-size: 0.8rem;">0 characters</small>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                    <button type="submit" class="btn btn-gradient-primary btn-lg" id="analyzeBtn">
+                        <i class="fas fa-magnifying-glass me-2"></i>
+                        Analyze & Verify Claim
+                    </button>
+                    <button type="button" class="btn btn-gradient-secondary btn-lg" id="clearBtn">
+                        <i class="fas fa-rotate-left me-2"></i>
+                        Clear
+                    </button>
+                </div>
+
+                <!-- Animated Processing Radar Sequence -->
+                <div class="loading text-center mt-4" style="display: none;">
+                    <div class="p-4 rounded-4 bg-dark border border-secondary mx-auto" style="max-width: 520px;">
+                        <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
+                            <div class="spinner-border text-cyan" role="status" style="width: 1.8rem; height: 1.8rem;">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span class="h6 mb-0 fw-bold text-white" id="stepText">Scanning 50,000+ Live Web RSS Outlets...</span>
+                        </div>
+                        <div class="progress-dark-container">
+                            <div id="loadingProgress" class="progress-bar-gradient" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Dashboard Section -->
+        <div id="results" style="display: none;">
+            
+            <!-- Hero Verdict Card -->
+            <div class="glass-card p-4 p-md-5 mb-4 position-relative overflow-hidden" id="verdictHeroCard">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 mb-4 mb-lg-0">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <span class="text-uppercase tracking-wider fw-bold text-secondary small" style="font-size: 0.75rem; letter-spacing: 1px;">System Unified Verdict</span>
+                            <div id="predictionBadge"></div>
+                        </div>
+                        <h2 class="h2 fw-bold text-white mb-2" id="verdictHeadline" style="font-family: 'Outfit', sans-serif;"></h2>
+                        <p class="text-secondary mb-0 leading-relaxed" id="verdictReason" style="font-size: 1.05rem;"></p>
+                    </div>
+                    
+                    <div class="col-lg-5 border-start-lg border-secondary ps-lg-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-semibold text-light">Overall System Confidence</span>
+                            <span class="fw-bold fs-4 text-white" id="confidenceValue" style="font-family: 'Space Grotesk', sans-serif;"></span>
+                        </div>
+                        <div class="progress-dark-container mb-3">
+                            <div id="confidenceBar" class="progress-bar-gradient" style="width: 0%;"></div>
+                        </div>
+                        
+                        <div class="row text-center g-2">
+                            <div class="col-6">
+                                <div class="p-3 rounded-3 bg-dark border border-secondary">
+                                    <small class="d-block fw-semibold mb-1" style="color: #f43f5e; font-size: 0.8rem;">Fake Risk Score</small>
+                                    <span id="fakeProbText" class="fw-bold fs-4 text-white" style="font-family: 'Space Grotesk', sans-serif;"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 rounded-3 bg-dark border border-secondary">
+                                    <small class="d-block fw-semibold mb-1" style="color: #10b981; font-size: 0.8rem;">True Credibility Score</small>
+                                    <span id="trueProbText" class="fw-bold fs-4 text-white" style="font-family: 'Space Grotesk', sans-serif;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Grid: Live Web Intelligence + AI Feature Analysis -->
+            <div class="row g-4 mb-4">
+                
+                <!-- Live Web Evidence Card -->
+                <div class="col-lg-6">
+                    <div class="glass-card p-4 h-100">
+                        <h4 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                            <i class="fas fa-globe text-cyan" style="color: #38bdf8;"></i>
+                            Real-Time Live Web Evidence
+                        </h4>
+                        <div id="liveStatusContainer" class="mb-3"></div>
+                        <div id="liveSourcesContainer"></div>
+                    </div>
+                </div>
+
+                <!-- AI Linguistic Analysis Card -->
+                <div class="col-lg-6">
+                    <div class="glass-card p-4 h-100">
+                        <h4 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                            <i class="fas fa-brain text-purple" style="color: #818cf8;"></i>
+                            AI Feature Impact Analysis
+                        </h4>
+                        <p class="text-secondary small mb-3">
+                            Key words and linguistic weights evaluated by the machine learning model:
+                        </p>
+                        <div id="topFeaturesContainer"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Interactive SHAP Chart Card -->
+            <div class="glass-card p-4 mb-5">
+                <h4 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                    <i class="fas fa-chart-bar text-emerald" style="color: #10b981;"></i>
+                    Linguistic Risk vs Real News Style (SHAP Analysis)
+                </h4>
+                <div id="shapChart" style="min-height: 360px;"></div>
+                <div class="mt-3 p-3 rounded-3 bg-dark border border-secondary">
+                    <small class="text-secondary d-block" style="font-size: 0.85rem; line-height: 1.6;">
+                        <i class="fas fa-circle-info text-cyan me-1" style="color: #38bdf8;"></i>
+                        <strong>How to read this chart:</strong>
+                        <br>• <strong>Green Bars (►)</strong>: Words reflecting standard formal news style.
+                        <br>• <strong>Red Bars (◄)</strong>: Words like <em>"free"</em> or <em>"give"</em> that carry promotional risk in general language models.
+                        <br>• <strong>Verification Note</strong>: Even when promotional words trigger red risk bars, our <strong>Real-Time Live Web Checker</strong> cross-references live news outlets to verify if the announcement is 100% genuine real news!
+                    </small>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Preset Test Claims Grid -->
+        <div class="glass-card p-4 p-md-5">
+            <h5 class="fw-bold text-white mb-4 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                <i class="fas fa-flask text-cyan" style="color: #38bdf8;"></i>
+                Test Trending Presets in One Click
+            </h5>
+            
+            <div class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <div class="preset-chip example-card" style="cursor: pointer;">
+                        <span class="badge bg-success-subtle text-success border border-success mb-2" style="font-size: 0.75rem;">Cricket Real News</span>
+                        <h6 class="text-white small fw-bold mb-1">Ajinkya Rahane Retirement</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"Ajinkya Rahane has taken retirment from all from of cricket today"</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-6">
+                    <div class="preset-chip example-card" style="cursor: pointer;">
+                        <span class="badge bg-danger-subtle text-danger border border-danger mb-2" style="font-size: 0.75rem;">Brand Entity Scam</span>
+                        <h6 class="text-white small fw-bold mb-1">Airtel Gemini Pro Offer</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"Airtel to give free gemini pro for 1 year"</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="preset-chip example-card" style="cursor: pointer;">
+                        <span class="badge bg-success-subtle text-success border border-success mb-2" style="font-size: 0.75rem;">Movie Release Real</span>
+                        <h6 class="text-white small fw-bold mb-1">Adarsha Kutumbam Date</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"Adarsha kutumbam to be realsed on oct 2"</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="preset-chip example-card" style="cursor: pointer;">
+                        <span class="badge bg-danger-subtle text-danger border border-danger mb-2" style="font-size: 0.75rem;">Fake Deal Rumor</span>
+                        <h6 class="text-white small fw-bold mb-1">Amazon Buys Flipkart</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"amazon to buy Flipkart"</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Sample Examples -->
-        <div class="card mt-4">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="fas fa-lightbulb me-2"></i>
-                    Try These Examples
-                </h5>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="p-3 border rounded example-text" style="cursor: pointer;">
-                            <h6 class="text-success">Legitimate News Example</h6>
-                            <p class="small mb-0">
-                                "The Federal Reserve announced today that it will maintain interest rates at their current level, 
-                                citing ongoing economic uncertainty and inflation concerns. The decision was made following a 
-                                two-day meeting of the Federal Open Market Committee."
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="p-3 border rounded example-text" style="cursor: pointer;">
-                            <h6 class="text-danger">Suspicious News Example</h6>
-                            <p class="small mb-0">
-                                "BREAKING: Scientists have discovered that drinking water causes 100% mortality rate! 
-                                Every person who has ever consumed H2O has died or will die. The government doesn't 
-                                want you to know this shocking truth!"
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 {% endblock %}
@@ -172,24 +223,55 @@ document.addEventListener('DOMContentLoaded', function() {
     const textArea = document.getElementById('newsText');
     const analyzeBtn = document.getElementById('analyzeBtn');
     const clearBtn = document.getElementById('clearBtn');
+    const pasteBtn = document.getElementById('pasteBtn');
+    const charCounter = document.getElementById('charCounter');
     const loading = document.querySelector('.loading');
+    const loadingProgress = document.getElementById('loadingProgress');
+    const stepText = document.getElementById('stepText');
     const results = document.getElementById('results');
-    const examples = document.querySelectorAll('.example-text');
+    const exampleCards = document.querySelectorAll('.example-card');
 
-    // Handle form submission
+    // Update Character Counter
+    textArea.addEventListener('input', function() {
+        charCounter.textContent = this.value.length + ' characters';
+    });
+
+    // Quick Paste
+    pasteBtn.addEventListener('click', async function() {
+        try {
+            const text = await navigator.clipboard.readText();
+            if (text) {
+                textArea.value = text;
+                charCounter.textContent = text.length + ' characters';
+                textArea.focus();
+            }
+        } catch (err) {
+            alert('Clipboard paste permission denied. Please paste manually.');
+        }
+    });
+
+    // Handle Form Submit with Animated Progress Sequence
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const text = textArea.value.trim();
         if (!text) {
-            alert('Please enter some text to analyze.');
+            alert('Please enter a headline or article text to analyze.');
             return;
         }
 
-        // Show loading state
+        // Show loading and progress sequence
         analyzeBtn.disabled = true;
         loading.style.display = 'block';
         results.style.display = 'none';
+        
+        loadingProgress.style.width = '30%';
+        stepText.textContent = 'Scanning 50,000+ Live Web RSS Outlets...';
+
+        setTimeout(() => {
+            loadingProgress.style.width = '70%';
+            stepText.textContent = 'Cross-checking Subject Entity & Date Consistency...';
+        }, 800);
 
         try {
             const response = await fetch('/predict', {
@@ -202,96 +284,142 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
 
-            if (response.ok) {
-                displayResults(data);
-            } else {
-                alert('Error: ' + data.error);
-            }
+            loadingProgress.style.width = '100%';
+            stepText.textContent = 'Computing SHAP Feature Contributions...';
+
+            setTimeout(() => {
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+                analyzeBtn.disabled = false;
+                loading.style.display = 'none';
+            }, 400);
+
         } catch (error) {
             alert('An error occurred: ' + error.message);
-        } finally {
             analyzeBtn.disabled = false;
             loading.style.display = 'none';
         }
     });
 
-    // Clear button
     clearBtn.addEventListener('click', function() {
         textArea.value = '';
+        charCounter.textContent = '0 characters';
         results.style.display = 'none';
     });
 
-    // Example text click handlers
-    examples.forEach(example => {
-        example.addEventListener('click', function() {
-            const text = this.querySelector('p').textContent;
-            textArea.value = text;
+    exampleCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const pText = this.querySelector('p').textContent.replace(/^"|"$/g, '');
+            textArea.value = pText;
+            charCounter.textContent = pText.length + ' characters';
             textArea.focus();
+            form.dispatchEvent(new Event('submit'));
         });
     });
 
     function displayResults(data) {
-        // Update prediction
-        const predictionElement = document.getElementById('prediction');
-        predictionElement.textContent = data.prediction;
-        predictionElement.className = `badge fs-6 ${data.prediction === 'Fake' ? 'bg-danger' : 'bg-success'}`;
+        const isFake = data.prediction === 'Fake';
 
-        // Update confidence
-        document.getElementById('confidence').textContent = data.confidence + '%';
-        
-        // Update confidence bar
+        // 1. Hero Verdict Badge
+        const badgeElem = document.getElementById('predictionBadge');
+        badgeElem.className = isFake ? 'verdict-badge-fake' : 'verdict-badge-true';
+        badgeElem.innerHTML = isFake 
+            ? '<i class="fas fa-triangle-exclamation"></i> FLAGGED AS FAKE / RUMOR' 
+            : '<i class="fas fa-circle-check"></i> VERIFIED AS REAL NEWS';
+
+        document.getElementById('verdictHeadline').textContent = isFake 
+            ? 'Misinformation / Fake News Detected' 
+            : 'Authentic & Verified Real News';
+            
+        document.getElementById('verdictReason').textContent = data.verdict_reason || '';
+
+        // 2. Confidence Meter
+        document.getElementById('confidenceValue').textContent = data.confidence + '%';
         const confidenceBar = document.getElementById('confidenceBar');
         confidenceBar.style.width = data.confidence + '%';
-        confidenceBar.style.backgroundColor = data.prediction === 'Fake' ? '#dc3545' : '#28a745';
+        confidenceBar.style.background = isFake 
+            ? 'linear-gradient(90deg, #f43f5e 0%, #e11d48 100%)' 
+            : 'linear-gradient(90deg, #10b981 0%, #059669 100%)';
 
-        // Update probabilities
-        document.getElementById('fakeProbability').textContent = data.probabilities.fake + '%';
-        document.getElementById('trueProbability').textContent = data.probabilities.true + '%';
+        document.getElementById('fakeProbText').textContent = data.probabilities.fake + '%';
+        document.getElementById('trueProbText').textContent = data.probabilities.true + '%';
 
-        // Update result card styling
-        const resultCard = document.querySelector('.result-card');
-        resultCard.className = `card result-card ${data.prediction === 'Fake' ? 'fake-result' : 'true-result'}`;
+        // 3. Live Web Evidence & Sources
+        if (data.live_fact_check) {
+            const fc = data.live_fact_check;
+            const liveStatus = document.getElementById('liveStatusContainer');
+            const liveSources = document.getElementById('liveSourcesContainer');
+            
+            let statusColor = '#f43f5e';
+            if (fc.verdict_color === 'success') statusColor = '#10b981';
+            else if (fc.verdict_color === 'warning' || fc.verdict_color === 'info') statusColor = '#f59e0b';
+            
+            liveStatus.innerHTML = `
+                <div class="p-3 rounded-4 bg-dark border border-secondary mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-secondary small fw-semibold">Live Web Engine Status:</span>
+                        <span class="badge" style="background: ${statusColor}20; color: ${statusColor}; border: 1px solid ${statusColor}40;">
+                            ${fc.status}
+                        </span>
+                    </div>
+                    <p class="text-white small mb-1 fw-medium">${fc.summary}</p>
+                    <small class="text-secondary" style="font-size: 0.75rem;"><i class="fas fa-search me-1 text-cyan"></i>Search query evaluated: "${fc.query_used}"</small>
+                </div>
+            `;
 
-        // Update explanation
-        const explanationText = document.getElementById('explanationText');
-        explanationText.innerHTML = `
-            <p class="mb-2">
-                The model classified this text as <strong>${data.prediction.toLowerCase()}</strong> 
-                with <strong>${data.confidence}% confidence</strong>.
-            </p>
-            <p class="small text-muted">
-                This prediction is based on analyzing various linguistic features, patterns, 
-                and characteristics commonly found in ${data.prediction.toLowerCase()} news.
-            </p>
-        `;
+            if (fc.sources && fc.sources.length > 0) {
+                let sourcesHtml = '<div class="d-flex flex-column gap-2">';
+                fc.sources.forEach(s => {
+                    sourcesHtml += `
+                        <a href="${s.url}" target="_blank" class="source-hover-card">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold text-white small text-truncate" style="max-width: 78%;">${s.title}</span>
+                                <span class="badge bg-secondary text-white" style="font-size: 0.7rem;">${s.source}</span>
+                            </div>
+                            ${s.snippet ? `<p class="text-secondary mb-0 small" style="font-size: 0.8rem;">${s.snippet.slice(0, 110)}...</p>` : ''}
+                        </a>
+                    `;
+                });
+                sourcesHtml += '</div>';
+                liveSources.innerHTML = sourcesHtml;
+            } else {
+                liveSources.innerHTML = '<p class="text-secondary small mt-2">No official press reports or fact-check records found across verified news outlets for this claim.</p>';
+            }
+        }
 
-        // Display top features
-        const topFeatures = document.getElementById('topFeatures');
+        // 4. Top Feature Pills
+        const topFeatures = document.getElementById('topFeaturesContainer');
         if (data.explanation && data.explanation.length > 0) {
-            let featuresHtml = '<h6 class="mb-2">Top Contributing Features:</h6>';
-            data.explanation.slice(0, 5).forEach(([feature, importance]) => {
+            let featuresHtml = '';
+            data.explanation.slice(0, 6).forEach(([feature, importance]) => {
                 const isPositive = importance > 0;
                 featuresHtml += `
-                    <div class="feature-item ${isPositive ? 'feature-positive' : 'feature-negative'}">
-                        <div class="d-flex justify-content-between">
-                            <span class="small">${feature}</span>
-                            <span class="small fw-bold ${isPositive ? 'text-success' : 'text-danger'}">
-                                ${importance > 0 ? '+' : ''}${importance.toFixed(4)}
-                            </span>
-                        </div>
+                    <div class="feature-pill-card ${isPositive ? 'feature-pill-card-true' : 'feature-pill-card-fake'}">
+                        <span>${feature}</span>
+                        <span class="fw-bold">${importance > 0 ? '+' : ''}${importance.toFixed(4)}</span>
                     </div>
                 `;
             });
             topFeatures.innerHTML = featuresHtml;
+        } else {
+            topFeatures.innerHTML = '<p class="text-secondary small">No strong single-word features extracted.</p>';
         }
 
-        // Display SHAP chart
+        // 5. Plotly SHAP Chart
         if (data.chart) {
             const chartData = JSON.parse(data.chart);
-            Plotly.newPlot('shapChart', chartData.data, chartData.layout, {responsive: true});
+            chartData.layout.paper_bgcolor = 'rgba(0,0,0,0)';
+            chartData.layout.plot_bgcolor = 'rgba(0,0,0,0)';
+            chartData.layout.font = { color: '#94a3b8', family: 'Plus Jakarta Sans' };
+            chartData.layout.xaxis = { gridcolor: 'rgba(255,255,255,0.08)' };
+            chartData.layout.yaxis = { gridcolor: 'rgba(255,255,255,0.08)' };
+            Plotly.newPlot('shapChart', chartData.data, chartData.layout, {responsive: true, displayModeBar: false});
         }
 
-        // Show results
+        // Show Results smoothly
         results.style.display = 'block';
         results.scrollIntoView({ behavior: 'smooth' });
     }

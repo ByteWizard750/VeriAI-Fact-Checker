@@ -1,138 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Fake News Detector{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{% block title %}VeriAI — Ultra-Fast Real-Time AI Fact Checker{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    
+    <!-- Plotly.js -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <style>
+        :root {
+            --bg-dark: #05070D;
+            --bg-card: rgba(15, 21, 37, 0.75);
+            --bg-card-hover: rgba(22, 31, 54, 0.85);
+            --accent-cyan: #38bdf8;
+            --accent-purple: #818cf8;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --accent-amber: #f59e0b;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(56, 189, 248, 0.3);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
-        
+
+        /* Subtle Cyber Grid Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .navbar {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(8, 12, 22, 0.85) !important;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border-glass);
+            z-index: 1000;
         }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+        .brand-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
-        
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-weight: 600;
+
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.35);
+            box-shadow: 0 25px 60px rgba(56, 189, 248, 0.12);
+        }
+
+        .form-control-dark {
+            background: rgba(10, 14, 25, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f8fafc;
+            border-radius: 18px;
+            padding: 20px;
+            font-size: 1.05rem;
+            line-height: 1.6;
             transition: all 0.3s ease;
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+        .form-control-dark:focus {
+            background: rgba(15, 22, 38, 0.95);
+            border-color: #38bdf8;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+            color: #ffffff;
         }
-        
-        .result-card {
-            margin-top: 20px;
-            animation: fadeInUp 0.5s ease;
+
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #0284c7 50%, #6366f1 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            padding: 14px 32px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.3px;
+            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .btn-gradient-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(56, 189, 248, 0.5);
+            color: #ffffff;
         }
-        
-        .fake-result {
-            border-left: 5px solid #dc3545;
-            background: linear-gradient(45deg, #ffebee, #ffcdd2);
+
+        .btn-gradient-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-secondary);
+            border-radius: 16px;
+            padding: 14px 28px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
         }
-        
-        .true-result {
-            border-left: 5px solid #28a745;
-            background: linear-gradient(45deg, #e8f5e8, #c8e6c9);
+
+        .btn-gradient-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.25);
         }
-        
-        .confidence-bar {
-            height: 10px;
-            border-radius: 5px;
+
+        /* Hero Verdict Badges */
+        .verdict-badge-fake {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(225, 29, 72, 0.3) 100%);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            border-radius: 100px;
+            padding: 10px 24px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(244, 63, 94, 0.25);
+        }
+
+        .verdict-badge-true {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.3) 100%);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 100px;
+            padding: 10px 24px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
+        }
+
+        /* Dynamic Progress Bar */
+        .progress-dark-container {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
             overflow: hidden;
-            background: #e9ecef;
+            padding: 2px;
         }
-        
-        .confidence-fill {
+
+        .progress-bar-gradient {
             height: 100%;
-            transition: width 0.5s ease;
+            border-radius: 100px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
         }
-        
-        .loading {
-            display: none;
+
+        /* Pulse Radar Indicator */
+        .radar-pulse {
+            position: relative;
+            width: 12px;
+            height: 12px;
+            background: #38bdf8;
+            border-radius: 50%;
+            display: inline-block;
         }
-        
-        .spinner-border {
-            width: 1.5rem;
-            height: 1.5rem;
+
+        .radar-pulse::after {
+            content: "";
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border: 2px solid #38bdf8;
+            border-radius: 50%;
+            animation: radar-wave 1.5s infinite linear;
         }
-        
-        .feature-item {
-            padding: 8px 12px;
-            margin: 4px 0;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.05);
+
+        @keyframes radar-wave {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.2); opacity: 0; }
         }
-        
-        .feature-positive {
-            border-left: 4px solid #28a745;
+
+        .feature-pill-card {
+            padding: 10px 16px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
         }
-        
-        .feature-negative {
-            border-left: 4px solid #dc3545;
+
+        .feature-pill-card-fake {
+            background: rgba(244, 63, 94, 0.12);
+            border-left: 4px solid #f43f5e;
+            color: #fda4af;
+        }
+
+        .feature-pill-card-true {
+            background: rgba(16, 185, 129, 0.12);
+            border-left: 4px solid #10b981;
+            color: #6ee7b7;
+        }
+
+        .source-hover-card {
+            background: rgba(12, 18, 32, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 16px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .source-hover-card:hover {
+            background: rgba(25, 36, 60, 0.9);
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            color: inherit;
+        }
+
+        .preset-chip {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .preset-chip:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(56, 189, 248, 0.5);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 28px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
-                <i class="fas fa-search-plus me-2"></i>
-                Fake News Detector
+            <a class="navbar-brand d-flex align-items-center gap-3" href="/">
+                <div class="d-flex align-items-center justify-content-center rounded-3 bg-dark border border-secondary p-2" style="width: 42px; height: 42px;">
+                    <i class="fas fa-shield-halved text-cyan fs-5" style="color: #38bdf8;"></i>
+                </div>
+                <span class="brand-logo">VeriAI Engine</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                </ul>
+            
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-dark border border-secondary text-secondary rounded-pill px-3 py-2 d-none d-sm-inline-flex align-items-center gap-2">
+                    <span class="radar-pulse"></span>
+                    <span class="fw-semibold text-light">50,000+ Outlets Monitored</span>
+                </span>
             </div>
         </div>
     </nav>
 
-    <main class="container my-5">
-        {% block content %}{% endblock %}
+    <!-- Main Content -->
+    <main class="py-5 position-relative">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-0 text-secondary">
+                Powered by <strong>VeriAI Dual Verification Architecture</strong> — Real-Time Live Web RSS Scraping + Semantic NLI Entailment Engine
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

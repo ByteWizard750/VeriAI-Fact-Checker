@@ -90,6 +90,11 @@ class FakeNewsDetector:
         fake_df = pd.read_csv('data/archive/Fake.csv')
         true_df = pd.read_csv('data/archive/True.csv')
         
+        # Clean Reuters headers from True news to prevent source shortcutting
+        true_df['text'] = true_df['text'].str.replace(r'^[A-Z\s,]+\(Reuters\)\s*-\s*', '', regex=True)
+        true_df['text'] = true_df['text'].str.replace(r'\(Reuters\)', '', regex=True)
+        true_df['title'] = true_df['title'].str.replace(r'\(Reuters\)', '', regex=True)
+        
         # Add labels
         fake_df['label'] = 0  # Fake news
         true_df['label'] = 1  # True news
@@ -108,12 +113,9 @@ class FakeNewsDetector:
         liar_data = pd.concat([liar_train, liar_test, liar_valid], ignore_index=True)
         
         # Process LIAR dataset - convert multi-class to binary
-        # Column 1 is label, Column 2 is statement
         liar_data.columns = ['id', 'label', 'statement', 'subject', 'speaker', 'job', 'state', 
                            'party', 'barely_true', 'false', 'half_true', 'mostly_true', 'pants_fire', 'context']
         
-        # Convert to binary: false, barely-true, pants-on-fire -> 0 (fake)
-        # half-true, mostly-true, true -> 1 (true)
         fake_labels = ['false', 'barely-true', 'pants-on-fire']
         liar_data['binary_label'] = liar_data['label'].apply(lambda x: 0 if x in fake_labels else 1)
         liar_data = liar_data[['statement', 'binary_label']].rename(columns={'statement': 'text', 'binary_label': 'label'})
@@ -127,23 +129,19 @@ class FakeNewsDetector:
         print(f"True news samples: {len(combined_data[combined_data['label'] == 1])}")
         
         return combined_data
-    
+
     def prepare_data(self, data, sample_size=10000):
         """Prepare and preprocess data for training"""
         print("Preprocessing text data...")
         
-        # Sample data for faster processing (optional)
         if len(data) > sample_size:
             data = data.sample(n=sample_size, random_state=42)
         
-        # Preprocess text
         data['processed_text'] = data['text'].apply(self.preprocess_text)
-        
-        # Remove empty texts
         data = data[data['processed_text'].str.len() > 0]
         
         return data
-    
+
     def train_model(self, data):
         """Train the fake news detection model"""
         print("Training model...")
@@ -151,28 +149,24 @@ class FakeNewsDetector:
         X = data['processed_text']
         y = data['label']
         
-        # Split data
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42, stratify=y
         )
         
-        # Vectorize text
         self.vectorizer = TfidfVectorizer(
-            max_features=5000,
+            max_features=10000,
             ngram_range=(1, 2),
             min_df=2,
-            max_df=0.95
+            max_df=0.95,
+            sublinear_tf=True
         )
         
         X_train_vec = self.vectorizer.fit_transform(X_train)
         X_test_vec = self.vectorizer.transform(X_test)
         
-        # Train multiple models and select the best one
         models = {
-            'RandomForest': RandomForestClassifier(n_estimators=100, random_state=42),
-            'LogisticRegression': LogisticRegression(random_state=42, max_iter=1000),
-            'XGBoost': xgb.XGBClassifier(random_state=42),
-            'LightGBM': lgb.LGBMClassifier(random_state=42, verbose=-1)
+            'LogisticRegression': LogisticRegression(C=2.0, random_state=42, max_iter=1000),
+            'RandomForest': RandomForestClassifier(n_estimators=100, random_state=42)
         }
         
         best_score = 0
@@ -192,18 +186,15 @@ class FakeNewsDetector:
         
         print(f"\nBest model: {best_model_name} with accuracy: {best_score:.4f}")
         
-        # Final evaluation
         y_pred_final = self.model.predict(X_test_vec)
         print("\nClassification Report:")
         print(classification_report(y_test, y_pred_final, target_names=['Fake', 'True']))
         
-        # Setup SHAP explainer
         print("Setting up SHAP explainer...")
         try:
-            if best_model_name in ['RandomForest', 'XGBoost', 'LightGBM']:
-                self.explainer = shap.TreeExplainer(self.model, feature_perturbation='interventional')
+            if hasattr(self.model, 'feature_importances_'):
+                self.explainer = shap.TreeExplainer(self.model)
             else:
-                # For linear models, use a sample of training data
                 self.explainer = shap.LinearExplainer(self.model, X_train_vec[:1000])
             print("SHAP explainer created successfully")
         except Exception as e:
@@ -211,92 +202,66 @@ class FakeNewsDetector:
             self.explainer = None
         
         return X_test_vec, y_test, y_pred_final
-    
+
     def predict_with_explanation(self, text):
         """Predict if news is fake and provide SHAP explanation"""
         if self.model is None or self.vectorizer is None:
             raise ValueError("Model not trained yet!")
         
-        # Preprocess text
         processed_text = self.preprocess_text(text)
         text_vec = self.vectorizer.transform([processed_text])
         
-        # Make prediction
         prediction = self.model.predict(text_vec)[0]
         probability = self.model.predict_proba(text_vec)[0]
         
-        # Get SHAP values
+        top_features = []
         try:
-            # Convert sparse vector to dense if needed (TreeExplainer often expects dense)
-            input_for_shap = text_vec
-            try:
-                # If model is tree-based or explainer is TreeExplainer, prefer dense
-                if hasattr(self.model, 'feature_importances_') and hasattr(text_vec, 'toarray'):
-                    input_for_shap = text_vec.toarray()
-            except Exception:
-                pass
-
-            shap_values = None
-            if self.explainer is not None:
-                shap_values = self.explainer.shap_values(input_for_shap)
-
-            # For some versions, shap_values can be a list per class; pick positive/TRUE class (index 1)
-            if isinstance(shap_values, list):
-                shap_values = shap_values[1]
-
             feature_names = self.vectorizer.get_feature_names_out()
+            dense_vec = text_vec.toarray().ravel() if hasattr(text_vec, 'toarray') else np.asarray(text_vec).ravel()
+            
+            contributions = None
+            if hasattr(self.model, 'coef_'):
+                contributions = self.model.coef_[0] * dense_vec
+            elif self.explainer is not None:
+                try:
+                    input_for_shap = text_vec.toarray() if hasattr(text_vec, 'toarray') else text_vec
+                    if isinstance(self.explainer, shap.TreeExplainer):
+                        sv = self.explainer.shap_values(input_for_shap, check_additivity=False)
+                    else:
+                        sv = self.explainer.shap_values(input_for_shap)
+                    if isinstance(sv, list):
+                        sv = sv[1]
+                    if hasattr(sv, 'shape') and len(sv.shape) > 1:
+                        sv = sv[0]
+                    contributions = sv
+                except Exception as ex:
+                    print(f"SHAP error: {ex}")
+            
+            if contributions is None and hasattr(self.model, 'feature_importances_'):
+                contributions = self.model.feature_importances_ * dense_vec
+                if prediction == 0:
+                    contributions = -contributions
 
-            # If shap_values has shape (n_samples, n_features), take first sample
-            if hasattr(shap_values, 'shape') and len(shap_values.shape) > 1:
-                shap_values = shap_values[0]
-
-            # If the predicted class is Fake (0), flip sign so that
-            # contributions supporting Fake are negative (red) and True are positive (green)
-            if prediction == 0:
-                shap_values = -shap_values
-
-            feature_importance = list(zip(feature_names, shap_values))
-            # Select strongest contributors for the predicted class (now always positive after flip handling)
-            feature_importance.sort(key=lambda x: x[1], reverse=True)
-            top_features = feature_importance[:10]
-
-        except Exception as e:
-            print(f"SHAP explanation error: {e}")
-            # Fallback 1: linear model coefficients contribution for present features
-            try:
-                feature_names = self.vectorizer.get_feature_names_out()
-                dense_vec = text_vec.toarray().ravel() if hasattr(text_vec, 'toarray') else np.asarray(text_vec).ravel()
-
-                if hasattr(self.model, 'coef_'):
-                    coefs = self.model.coef_[0]
-                    contributions = coefs * dense_vec
-                    # Flip sign for Fake predictions to keep red/green semantics consistent
-                    if prediction == 0:
-                        contributions = -contributions
-                    feature_importance = list(zip(feature_names, contributions))
-                    feature_importance.sort(key=lambda x: x[1], reverse=True)
-                    top_features = feature_importance[:10]
-                elif hasattr(self.model, 'feature_importances_'):
-                    importances = self.model.feature_importances_
-                    contributions = importances * dense_vec
-                    if prediction == 0:
-                        contributions = -contributions
-                    feature_importance = list(zip(feature_names, contributions))
-                    feature_importance = [fi for fi in feature_importance if fi[1] != 0]
-                    feature_importance.sort(key=lambda x: x[1], reverse=True)
-                    top_features = feature_importance[:10]
+            if contributions is not None:
+                feature_importance = [(feature_names[i], float(contributions[i])) 
+                                     for i in range(len(feature_names)) if dense_vec[i] > 0]
+                if prediction == 0:
+                    # For Fake predictions, sort by negative values (features driving to Fake)
+                    feature_importance.sort(key=lambda x: x[1])
                 else:
-                    top_features = []
-            except Exception as e2:
-                print(f"Fallback feature importance error: {e2}")
-                top_features = []
+                    # For True predictions, sort by positive values (features driving to True)
+                    feature_importance.sort(key=lambda x: x[1], reverse=True)
+                top_features = feature_importance[:10]
+        except Exception as e:
+            print(f"Explanation error: {e}")
+            top_features = []
         
         result = {
             'prediction': 'Fake' if prediction == 0 else 'True',
-            'confidence': max(probability),
+            'confidence': float(max(probability)),
             'probabilities': {
-                'fake': probability[0],
-                'true': probability[1]
+                'fake': float(probability[0]),
+                'true': float(probability[1])
             },
             'explanation': top_features
         }
