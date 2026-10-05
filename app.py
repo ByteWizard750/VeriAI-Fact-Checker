@@ -1,7 +1,12 @@
+import os
+os.environ["OBJC_DISABLE_INITIALIZE_FORK_SAFETY"] = "YES"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["LOKY_MAX_CPU_COUNT"] = "1"
+os.environ["JOBLIB_MULTIPROCESSING"] = "0"
+
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import json
-import os
 from fake_news_detector import FakeNewsDetector
 import plotly.graph_objs as go
 import plotly.utils
@@ -57,7 +62,17 @@ def initialize_detector():
         except Exception as train_error:
             print(f"Failed to train model: {train_error}")
             return False
+    # Pre-warm Neural Transformer NLI model
+    try:
+        from nli_verifier import SemanticNLIVerifier
+        SemanticNLIVerifier.get_instance().load_model()
+    except Exception as e:
+        print(f"Warning: Failed to pre-warm Neural NLI model: {e}")
+        
     return True
+
+# Initialize detector on module import for WSGI servers
+initialize_detector()
 
 @app.route('/')
 def index():
@@ -111,45 +126,69 @@ def predict():
         else:
             chart_json = None
         
-        # Run live web fact check
+        # Run live web evidence verification agent
         try:
-            from fact_checker import verify_claim_live
-            live_check = verify_claim_live(text)
+            from verification_agent import verify_claim_agent
+            agent_result = verify_claim_agent(text)
         except Exception as fc_err:
-            print(f"Fact check error: {fc_err}")
-            live_check = {
-                'status': 'Check Failed',
+            print(f"Verification Agent error: {fc_err}")
+            agent_result = {
+                'verdict': 'UNVERIFIED / INSUFFICIENT EVIDENCE',
+                'verdict_state': 'UNVERIFIED',
                 'verdict_color': 'secondary',
-                'summary': 'Could not query live web search at this time.',
+                'confidence': 25.0,
+                'summary': 'Could not complete web evidence verification at this time.',
+                'query_used': text[:50],
+                'is_verified': False,
+                'claim_components': {'entities': [], 'dates': [], 'numbers': [], 'locations': [], 'event_type': 'general_claim'},
+                'propositions': [],
+                'supporting_evidence': [],
+                'contradicting_evidence': [],
+                'source_corroboration': {'evaluated_sources_count': 0, 'independent_sources_count': 0, 'syndicated_copies_detected': 0},
+                'consistency_checks': {'entity_consistency': 'MISMATCH', 'temporal_consistency': 'DATE_MISMATCH', 'numerical_consistency': 'NUMBER_MISMATCH'},
                 'sources': []
             }
             
-        # Compute Unified Final Verdict (combining AI Semantic Cross-Verification + Style Analysis)
-        if live_check.get('is_verified', False):
+        # Map agent state to prediction string for legacy UI widgets
+        v_state = agent_result.get('verdict_state', 'UNVERIFIED')
+        if v_state in ['VERIFIED', 'SUPPORTED']:
             final_prediction = 'True'
-            verdict_reason = f"Verified as Genuine Real News confirmed by live news reports with {live_check.get('alignment_score', 95.0)}% semantic alignment."
-            display_confidence = 95.0
-        elif live_check['status'] in ['Unverified Claim / False Rumor', 'Unverified Rumor / Misinformation', 'Fact-Check Article Found']:
+        elif v_state in ['CONTRADICTED']:
             final_prediction = 'Fake'
-            verdict_reason = live_check['summary']
-            display_confidence = 90.0
+        elif v_state in ['PARTIALLY_SUPPORTED']:
+            final_prediction = 'Partially Supported'
         else:
-            final_prediction = result['prediction']
-            verdict_reason = f"Classified as {result['prediction']} based on AI linguistic style and vocabulary analysis."
-            display_confidence = round(result['confidence'] * 100, 2)
-        
+            final_prediction = 'Unverified'
+
+        display_confidence = agent_result.get('confidence', 30.0)
+        verdict_reason = agent_result.get('summary', '')
+
+        # Fake vs True probabilities strictly reflecting derived evidence confidence
+        if final_prediction == 'True':
+            fake_prob = round(100.0 - display_confidence, 1)
+            true_prob = display_confidence
+        elif final_prediction == 'Fake':
+            fake_prob = display_confidence
+            true_prob = round(100.0 - display_confidence, 1)
+        else:
+            fake_prob = 50.0
+            true_prob = 50.0
+
         return jsonify({
             'prediction': final_prediction,
+            'verdict': agent_result.get('verdict'),
+            'verdict_state': v_state,
+            'verdict_color': agent_result.get('verdict_color', 'secondary'),
             'verdict_reason': verdict_reason,
             'style_prediction': result['prediction'],
             'confidence': display_confidence,
             'probabilities': {
-                'fake': 90.0 if final_prediction == 'Fake' else 10.0,
-                'true': 10.0 if final_prediction == 'Fake' else 90.0
+                'fake': fake_prob,
+                'true': true_prob
             },
             'explanation': result['explanation'][:10],
             'chart': chart_json,
-            'live_fact_check': live_check
+            'live_fact_check': agent_result
         })
 
 
@@ -176,7 +215,7 @@ if __name__ == '__main__':
     if initialize_detector():
         port = int(os.environ.get('PORT', 5001))
         print(f"Starting Flask application on port {port}...")
-        app.run(debug=True, host='0.0.0.0', port=port)
+        app.run(debug=False, host='0.0.0.0', port=port, use_reloader=False, threaded=False)
     else:
         print("Failed to initialize detector. Please train the model first.")
 
