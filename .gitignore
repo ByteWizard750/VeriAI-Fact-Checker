@@ -16,6 +16,7 @@ models/
 # Logs & Temporary Files
 *.log
 app_output.log
+*.zip
 
 # OS & IDE
 .DS_Store
