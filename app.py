@@ -1,13 +1,23 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 os.environ["OBJC_DISABLE_INITIALIZE_FORK_SAFETY"] = "YES"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 os.environ["LOKY_MAX_CPU_COUNT"] = "1"
 os.environ["JOBLIB_MULTIPROCESSING"] = "0"
 
+gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
+if gemini_key:
+    print("Gemini API configured: YES")
+else:
+    print("Gemini API configured: NO (Set GEMINI_API_KEY in .env for full Gemini agentic verification)")
+
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import json
 from fake_news_detector import FakeNewsDetector
+
 import plotly.graph_objs as go
 import plotly.utils
 
@@ -114,10 +124,10 @@ def predict():
             ])
             
             fig.update_layout(
-                title='Feature Impact on AI Model (Red = Promotional Risk | Green = Real News Style)',
-                xaxis_title='◄ Pushes Toward Fake / Risk  |  Pushes Toward Real News ►',
+                title='Feature Contributions to Model Prediction',
+                xaxis_title='◄ Pushes Toward Unverified Style  |  Pushes Toward Verified News Style ►',
                 yaxis_title='Feature Terms',
-                height=380,
+                height=360,
                 margin=dict(l=140, r=40, t=50, b=50)
             )
             
@@ -164,15 +174,38 @@ def predict():
         verdict_reason = agent_result.get('summary', '')
 
         # Fake vs True probabilities strictly reflecting derived evidence confidence
-        if final_prediction == 'True':
-            fake_prob = round(100.0 - display_confidence, 1)
+        if final_prediction in ['True', 'Partially Supported']:
             true_prob = display_confidence
+            fake_prob = round(100.0 - display_confidence, 1)
         elif final_prediction == 'Fake':
             fake_prob = display_confidence
             true_prob = round(100.0 - display_confidence, 1)
         else:
             fake_prob = 50.0
             true_prob = 50.0
+
+        # Process SHAP explanations for rich interactive UI
+        raw_explanation = result.get('explanation', [])
+        shap_word_map = {}
+        pos_terms = []
+        neg_terms = []
+        
+        for item in raw_explanation:
+            if isinstance(item, (list, tuple)) and len(item) >= 2:
+                word = str(item[0]).strip().lower()
+                val = float(item[1])
+                shap_word_map[word] = round(val, 4)
+                if val > 0:
+                    pos_terms.append({'word': word, 'impact': round(val, 3)})
+                elif val < 0:
+                    neg_terms.append({'word': word, 'impact': round(val, 3)})
+
+        pos_terms.sort(key=lambda x: x['impact'], reverse=True)
+        neg_terms.sort(key=lambda x: x['impact'])
+
+        # Calculate Linguistic Style Quality Index (0-100%)
+        net_shap = sum(item[1] for item in raw_explanation if isinstance(item, (list, tuple)))
+        linguistic_score = round(max(10.0, min(98.0, 60.0 + (net_shap * 25.0))), 1)
 
         return jsonify({
             'prediction': final_prediction,
@@ -186,7 +219,13 @@ def predict():
                 'fake': fake_prob,
                 'true': true_prob
             },
-            'explanation': result['explanation'][:10],
+            'explanation': raw_explanation[:10],
+            'shap_analysis': {
+                'word_scores': shap_word_map,
+                'positive_terms': pos_terms[:6],
+                'negative_terms': neg_terms[:6],
+                'linguistic_score': linguistic_score
+            },
             'chart': chart_json,
             'live_fact_check': agent_result
         })
@@ -215,7 +254,7 @@ if __name__ == '__main__':
     if initialize_detector():
         port = int(os.environ.get('PORT', 5001))
         print(f"Starting Flask application on port {port}...")
-        app.run(debug=False, host='0.0.0.0', port=port, use_reloader=False, threaded=False)
+        app.run(debug=False, host='0.0.0.0', port=port, use_reloader=False, threaded=True)
     else:
         print("Failed to initialize detector. Please train the model first.")
 

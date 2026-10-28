@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}VeriAI — Ultra-Fast Real-Time AI Fact Checker{% endblock %}</title>
+    <title>{% block title %}VeriAI — Autonomous Real-Time Fact Verification{% endblock %}</title>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Bootstrap 5 & FontAwesome -->
+    <!-- Bootstrap 5 & FontAwesome 6 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     
@@ -18,26 +19,29 @@
 
     <style>
         :root {
-            --bg-dark: #05070D;
-            --bg-card: rgba(15, 21, 37, 0.75);
-            --bg-card-hover: rgba(22, 31, 54, 0.85);
+            --bg-dark: #050811;
+            --bg-card: rgba(13, 22, 40, 0.72);
+            --bg-card-hover: rgba(20, 34, 60, 0.85);
             --accent-cyan: #38bdf8;
-            --accent-purple: #818cf8;
+            --accent-blue: #3b82f6;
+            --accent-indigo: #6366f1;
             --accent-emerald: #10b981;
             --accent-rose: #f43f5e;
             --accent-amber: #f59e0b;
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(56, 189, 248, 0.3);
+            --accent-purple: #a855f7;
+            --border-glass: rgba(255, 255, 255, 0.11);
+            --border-glow: rgba(56, 189, 248, 0.4);
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
+            --text-muted: #64748b;
         }
 
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 10% 12%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 45%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.10) 0%, transparent 45%);
             background-attachment: fixed;
             color: var(--text-primary);
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -45,166 +49,159 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Subtle Cyber Grid Overlay */
-        body::before {
-            content: "";
+        /* Ambient Particle Grid Canvas */
+        #bgCanvas {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
             z-index: 0;
+            opacity: 0.55;
         }
 
+        /* Glassmorphism Navigation Bar */
         .navbar {
-            background: rgba(8, 12, 22, 0.85) !important;
+            background: rgba(5, 8, 17, 0.85) !important;
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border-glass);
             z-index: 1000;
+            padding: 16px 0;
         }
 
         .brand-logo {
             font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 1.65rem;
+            color: #ffffff;
             letter-spacing: -0.5px;
         }
 
+        .brand-logo-accent {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Modern Futuristic Cards */
         .glass-card {
             background: var(--bg-card);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
             border: 1px solid var(--border-glass);
             border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             z-index: 1;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.6) 50%, transparent 100%);
         }
 
         .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.35);
-            box-shadow: 0 25px 60px rgba(56, 189, 248, 0.12);
+            border-color: rgba(56, 189, 248, 0.35);
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.65), 0 0 40px rgba(56, 189, 248, 0.15);
+            transform: translateY(-2px);
         }
 
-        .form-control-dark {
-            background: rgba(10, 14, 25, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #f8fafc;
+        .glass-panel {
+            background: rgba(8, 15, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.09);
             border-radius: 18px;
-            padding: 20px;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            transition: all 0.3s ease;
+            padding: 22px;
+            transition: all 0.25s ease;
+        }
+
+        .glass-panel:hover {
+            background: rgba(14, 24, 46, 0.82);
+            border-color: rgba(56, 189, 248, 0.25);
+        }
+
+        /* Text Controls */
+        .form-control-dark {
+            background: rgba(7, 13, 26, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            border-radius: 20px;
+            padding: 20px 24px;
+            font-size: 1.1rem;
+            line-height: 1.65;
+            transition: all 0.25s ease;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .form-control-dark:focus {
-            background: rgba(15, 22, 38, 0.95);
-            border-color: #38bdf8;
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+            background: rgba(10, 18, 36, 0.98);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.22), 0 0 30px rgba(56, 189, 248, 0.15);
             color: #ffffff;
         }
 
+        /* Vibrant Gradient Buttons */
         .btn-gradient-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #0284c7 50%, #6366f1 100%);
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #6366f1 100%);
             color: #ffffff;
             border: none;
             border-radius: 16px;
-            padding: 14px 32px;
+            padding: 16px 38px;
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 0.3px;
-            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.35);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.12rem;
+            letter-spacing: 0.4px;
+            box-shadow: 0 8px 30px rgba(2, 132, 199, 0.45);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-gradient-primary:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 10px 35px rgba(56, 189, 248, 0.5);
+            background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 50%, #4f46e5 100%);
             color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 36px rgba(2, 132, 199, 0.6);
         }
 
         .btn-gradient-secondary {
             background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: var(--text-secondary);
             border-radius: 16px;
-            padding: 14px 28px;
+            padding: 16px 32px;
             font-family: 'Outfit', sans-serif;
             font-weight: 600;
             font-size: 1.05rem;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
 
         .btn-gradient-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.14);
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-
-        /* Hero Verdict Badges */
-        .verdict-badge-fake {
-            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(225, 29, 72, 0.3) 100%);
-            color: #fb7185;
-            border: 1px solid rgba(244, 63, 94, 0.4);
-            border-radius: 100px;
-            padding: 10px 24px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 20px rgba(244, 63, 94, 0.25);
-        }
-
-        .verdict-badge-true {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.3) 100%);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            border-radius: 100px;
-            padding: 10px 24px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
-        }
-
-        /* Dynamic Progress Bar */
-        .progress-dark-container {
-            height: 12px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 100px;
-            overflow: hidden;
-            padding: 2px;
-        }
-
-        .progress-bar-gradient {
-            height: 100%;
-            border-radius: 100px;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         /* Pulse Radar Indicator */
         .radar-pulse {
             position: relative;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: #38bdf8;
             border-radius: 50%;
             display: inline-block;
+            box-shadow: 0 0 12px #38bdf8;
         }
 
         .radar-pulse::after {
@@ -213,106 +210,231 @@
             top: -4px; left: -4px; right: -4px; bottom: -4px;
             border: 2px solid #38bdf8;
             border-radius: 50%;
-            animation: radar-wave 1.5s infinite linear;
+            animation: radar-wave 2s infinite ease-out;
         }
 
         @keyframes radar-wave {
-            0% { transform: scale(0.8); opacity: 1; }
-            100% { transform: scale(2.2); opacity: 0; }
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
         }
 
-        .feature-pill-card {
-            padding: 10px 16px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s ease;
-        }
-
-        .feature-pill-card-fake {
-            background: rgba(244, 63, 94, 0.12);
-            border-left: 4px solid #f43f5e;
-            color: #fda4af;
-        }
-
-        .feature-pill-card-true {
-            background: rgba(16, 185, 129, 0.12);
-            border-left: 4px solid #10b981;
-            color: #6ee7b7;
-        }
-
+        /* Interactive Source & Preset Cards */
         .source-hover-card {
-            background: rgba(12, 18, 32, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 16px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(9, 17, 32, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 20px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
             color: inherit;
             display: block;
         }
 
         .source-hover-card:hover {
-            background: rgba(25, 36, 60, 0.9);
-            border-color: rgba(56, 189, 248, 0.4);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(18, 32, 58, 0.92);
+            border-color: rgba(56, 189, 248, 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 25px rgba(56, 189, 248, 0.12);
             color: inherit;
         }
 
         .preset-chip {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(9, 17, 32, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 20px;
+            padding: 22px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preset-chip::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: linear-gradient(180deg, #38bdf8, #818cf8);
+            opacity: 0.7;
         }
 
         .preset-chip:hover {
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(18, 32, 58, 0.92);
             border-color: rgba(56, 189, 248, 0.5);
             transform: translateY(-3px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Graphic Metric Counter Badges */
+        .metric-card {
+            background: linear-gradient(145deg, rgba(12, 20, 38, 0.9) 0%, rgba(8, 14, 26, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            text-center;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            border-color: rgba(56, 189, 248, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .metric-card-success {
+            border-bottom: 3px solid #10b981;
+        }
+
+        .metric-card-danger {
+            border-bottom: 3px solid #f43f5e;
+        }
+
+        .metric-card-warning {
+            border-bottom: 3px solid #f59e0b;
+        }
+
+        /* SVG Circular Progress Ring */
+        .svg-ring-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .svg-ring-circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 9;
+        }
+
+        .svg-ring-circle-val {
+            fill: none;
+            stroke: #38bdf8;
+            stroke-width: 9;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* SHAP Modern AI Token Heatmap Styles */
+        .shap-token-pos {
+            background: rgba(16, 185, 129, 0.16);
+            border-bottom: 2px solid #10b981;
+            color: #34d399;
+            border-radius: 6px;
+            padding: 3px 8px;
+            margin: 2px 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+        }
+
+        .shap-token-pos:hover {
+            background: rgba(16, 185, 129, 0.28);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .shap-token-neg {
+            background: rgba(244, 63, 94, 0.16);
+            border-bottom: 2px solid #f43f5e;
+            color: #fb7185;
+            border-radius: 6px;
+            padding: 3px 8px;
+            margin: 2px 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.15);
+        }
+
+        .shap-token-neg:hover {
+            background: rgba(244, 63, 94, 0.28);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+        }
+
+        .shap-token-neutral {
+            color: #f8fafc;
+            padding: 3px 4px;
+            margin: 2px 1px;
+            display: inline-block;
+        }
+
+        .shap-score-tag {
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        /* Fade In Up Animations */
+        .animate-fade-in {
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         footer {
             margin-top: auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 28px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 32px 0;
+            background: rgba(4, 7, 15, 0.96);
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             position: relative;
             z-index: 1;
         }
     </style>
 </head>
 <body>
+    <!-- Background Canvas for Interactive Particle Animation -->
+    <canvas id="bgCanvas"></canvas>
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-3" href="/">
-                <div class="d-flex align-items-center justify-content-center rounded-3 bg-dark border border-secondary p-2" style="width: 42px; height: 42px;">
-                    <i class="fas fa-shield-halved text-cyan fs-5" style="color: #38bdf8;"></i>
+            <a class="navbar-brand d-flex align-items-center gap-2.5" href="/">
+                <div class="d-flex align-items-center justify-content-center rounded-3 bg-dark border border-secondary p-2" style="width: 46px; height: 46px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);">
+                    <i class="fas fa-shield-halved text-cyan fs-4" style="color: #38bdf8;"></i>
                 </div>
-                <span class="brand-logo">VeriAI Engine</span>
+                <span class="brand-logo">Veri<span class="brand-logo-accent">AI</span></span>
             </a>
             
             <div class="d-flex align-items-center gap-3">
-                <span class="badge bg-dark border border-secondary text-secondary rounded-pill px-3 py-2 d-none d-sm-inline-flex align-items-center gap-2">
+                <span class="badge bg-dark border border-secondary text-secondary rounded-pill px-3.5 py-2 d-none d-sm-inline-flex align-items-center gap-2" style="box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);">
                     <span class="radar-pulse"></span>
-                    <span class="fw-semibold text-light">50,000+ Outlets Monitored</span>
+                    <span class="fw-bold text-light" style="font-size: 0.84rem; letter-spacing: 0.4px;">Autonomous Fact Engine Active</span>
                 </span>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="py-5 position-relative">
+    <main class="py-4 py-md-5 position-relative" style="z-index: 1;">
         <div class="container">
             {% block content %}{% endblock %}
         </div>
@@ -321,11 +443,84 @@
     <!-- Footer -->
     <footer>
         <div class="container text-center">
-            <p class="mb-0 text-secondary">
-                Powered by <strong>VeriAI Dual Verification Architecture</strong> — Real-Time Live Web RSS Scraping + Semantic NLI Entailment Engine
+            <div class="d-inline-flex align-items-center gap-2 mb-2 text-light fw-bold" style="font-family: 'Outfit', sans-serif; font-size: 1rem;">
+                <i class="fas fa-shield-halved text-cyan" style="color: #38bdf8;"></i> VeriAI — Factual Intelligence & Grounded Web Evidence
+            </div>
+            <p class="mb-0 text-secondary mx-auto" style="max-width: 680px; font-size: 0.84rem; line-height: 1.65;">
+                Fact verification combines real-time multi-source press retrieval with SHAP machine learning feature attributions. Always verify critical claims with official primary sources.
             </p>
         </div>
     </footer>
+
+    <!-- Canvas Animation Script -->
+    <script>
+    (function() {
+        const canvas = document.getElementById('bgCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const numParticles = 45;
+
+        for (let i = 0; i < numParticles; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                radius: Math.random() * 2 + 1,
+                alpha: Math.random() * 0.5 + 0.2
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0) p.x = width;
+                if (p.x > width) p.x = 0;
+                if (p.y < 0) p.y = height;
+                if (p.y > height) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(56, 189, 248, ${p.alpha})`;
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 140) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${0.14 * (1 - dist / 140)})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    })();
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

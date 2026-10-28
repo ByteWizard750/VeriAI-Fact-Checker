@@ -21,3 +21,7 @@ app_output.log
 .DS_Store
 .vscode/
 .idea/
+
+# Environment Variables
+.env
+

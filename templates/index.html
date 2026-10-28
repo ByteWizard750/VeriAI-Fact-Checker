@@ -2,211 +2,460 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-xl-10">
+    <div class="col-xl-11">
         
-        <!-- Hero Section -->
-        <div class="text-center mb-5">
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill bg-dark border border-secondary text-secondary mb-3">
-                <i class="fas fa-bolt text-cyan" style="color: #38bdf8;"></i>
-                <span class="small fw-semibold text-light">Real-Time Search + Semantic NLI Entailment Engine</span>
+        <!-- Hero Graphic Header -->
+        <div class="text-center mb-4 mb-md-5">
+            <div class="d-inline-flex align-items-center gap-2 px-3.5 py-2 rounded-pill bg-dark border border-secondary text-secondary mb-3 shadow-lg">
+                <i class="fas fa-atom text-cyan fa-spin" style="color: #38bdf8; font-size: 0.95rem; animation-duration: 6s;"></i>
+                <span class="small fw-extrabold text-light" style="font-size: 0.85rem; letter-spacing: 0.9px;">VERIAI AUTONOMOUS FACT ENGINE</span>
             </div>
             
-            <h1 class="display-4 fw-bold text-white mb-3" style="font-family: 'Outfit', sans-serif; letter-spacing: -0.5px;">
-                Instant News & Rumor Verification
+            <h1 class="display-5 fw-extrabold text-white mb-3" style="font-family: 'Outfit', sans-serif; letter-spacing: -0.6px; line-height: 1.25;">
+                Factual Intelligence Grounded in <span style="background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Live Web Evidence</span>
             </h1>
             
-            <p class="lead text-secondary mx-auto" style="max-width: 680px; font-size: 1.15rem;">
-                Cross-references news headlines, claims, and viral posts against <strong>50,000+ live RSS news feeds</strong>, evaluating subject entities, release dates, and linguistic patterns.
+            <p class="lead text-secondary mx-auto" style="max-width: 760px; font-size: 1.12rem; line-height: 1.65;">
+                Investigate news headlines, viral claims, and public statements with multi-source web cross-referencing, atomic proposition decomposition, and explainable AI feature attributions.
             </p>
         </div>
 
-        <!-- Main Input Form Card -->
-        <div class="glass-card p-4 p-md-5 mb-5">
+        <!-- Main Claim Input Form Card -->
+        <div class="glass-card p-4 p-md-5 mb-4 mb-md-5">
             <form id="newsForm">
                 <div class="mb-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label for="newsText" class="form-label fw-bold text-white mb-0 d-flex align-items-center gap-2">
-                            <i class="fas fa-quote-left text-cyan" style="color: #38bdf8;"></i> Paste News Headline, Claim, or Article
+                    <div class="d-flex justify-content-between align-items-center mb-2.5 flex-wrap gap-2">
+                        <label for="newsText" class="form-label fw-bold text-white mb-0 d-flex align-items-center gap-2" style="font-size: 1.05rem; font-family: 'Outfit', sans-serif;">
+                            <i class="fas fa-keyboard text-cyan" style="color: #38bdf8;"></i> Enter Headline or Fact Claim
                         </label>
-                        <button type="button" class="btn btn-sm btn-dark border border-secondary text-secondary rounded-pill px-3" id="pasteBtn">
-                            <i class="fas fa-paste me-1"></i> Quick Paste
+                        <button type="button" class="btn btn-sm btn-dark border border-secondary text-secondary rounded-pill px-3.5 py-1.5 d-inline-flex align-items-center gap-1.5" id="pasteBtn">
+                            <i class="fas fa-paste text-cyan" style="color: #38bdf8;"></i> Quick Paste
                         </button>
                     </div>
                     
                     <textarea 
                         class="form-control form-control-dark" 
                         id="newsText" 
-                        rows="5" 
-                        placeholder="e.g. 'Ajinkya Rahane announces retirement from cricket' or 'Airtel to give free Gemini Pro for 1 year' or 'Adarsha kutumbam release date on oct 2'..."
+                        rows="4" 
+                        placeholder="e.g., Assam student who called home about drunken men in train coach found dead near tracks in Andhra..."
                         required
                     ></textarea>
                     
-                    <div class="d-flex justify-content-between align-items-center mt-2 px-1">
-                        <small class="text-secondary" style="font-size: 0.8rem;">
-                            <i class="fas fa-shield-check me-1 text-emerald" style="color: #10b981;"></i> Analyzes entities, temporal dates, and live web press releases
+                    <div class="d-flex justify-content-between align-items-center mt-3 px-1">
+                        <small class="text-secondary d-flex align-items-center gap-2" style="font-size: 0.84rem;">
+                            <i class="fas fa-shield-halved text-cyan" style="color: #38bdf8;"></i> Searches live global news feeds & evaluates factual alignment
                         </small>
-                        <small class="text-secondary fw-semibold" id="charCounter" style="font-size: 0.8rem;">0 characters</small>
+                        <small class="text-secondary fw-bold" id="charCounter" style="font-size: 0.84rem;">0 characters</small>
                     </div>
                 </div>
 
-                <div class="d-flex flex-wrap gap-3 justify-content-center">
-                    <button type="submit" class="btn btn-gradient-primary btn-lg" id="analyzeBtn">
-                        <i class="fas fa-magnifying-glass me-2"></i>
-                        Analyze & Verify Claim
+                <div class="d-flex flex-wrap gap-3 justify-content-center mb-4">
+                    <button type="submit" class="btn btn-gradient-primary d-inline-flex align-items-center gap-2" id="analyzeBtn">
+                        <i class="fas fa-magnifying-glass-chart fs-5"></i>
+                        <span>Analyse Claim</span>
                     </button>
-                    <button type="button" class="btn btn-gradient-secondary btn-lg" id="clearBtn">
-                        <i class="fas fa-rotate-left me-2"></i>
-                        Clear
+                    <button type="button" class="btn btn-gradient-secondary d-inline-flex align-items-center gap-2" id="clearBtn">
+                        <i class="fas fa-rotate-left"></i>
+                        <span>Clear Input</span>
                     </button>
                 </div>
 
-                <!-- Animated Processing Radar Sequence -->
+                <!-- 3 Key Feature Badges with Graphic Icons -->
+                <div class="row g-3 justify-content-center text-center">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="p-3 rounded-3 bg-dark border border-secondary text-secondary small d-flex align-items-center justify-content-center gap-2">
+                            <i class="fas fa-satellite-dish text-cyan fs-6" style="color: #38bdf8;"></i>
+                            <span class="text-light fw-bold" style="font-size: 0.86rem;">Live Web Retrieval</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="p-3 rounded-3 bg-dark border border-secondary text-secondary small d-flex align-items-center justify-content-center gap-2">
+                            <i class="fas fa-scale-balanced text-cyan fs-6" style="color: #38bdf8;"></i>
+                            <span class="text-light fw-bold" style="font-size: 0.86rem;">Source Cross-Checking</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="p-3 rounded-3 bg-dark border border-secondary text-secondary small d-flex align-items-center justify-content-center gap-2">
+                            <i class="fas fa-brain text-cyan fs-6" style="color: #38bdf8;"></i>
+                            <span class="text-light fw-bold" style="font-size: 0.86rem;">SHAP Explainable AI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fast Animated Loading Overlay -->
                 <div class="loading text-center mt-4" style="display: none;">
-                    <div class="p-4 rounded-4 bg-dark border border-secondary mx-auto" style="max-width: 520px;">
+                    <div class="p-4 rounded-4 bg-dark border border-secondary mx-auto shadow-lg" style="max-width: 500px;">
                         <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
                             <div class="spinner-border text-cyan" role="status" style="width: 1.8rem; height: 1.8rem;">
-                                <span class="visually-hidden">Loading...</span>
+                                <span class="visually-hidden">Analyzing...</span>
                             </div>
-                            <span class="h6 mb-0 fw-bold text-white" id="stepText">Scanning 50,000+ Live Web RSS Outlets...</span>
+                            <span class="h6 mb-0 fw-bold text-white" id="stepText">Gathering live web evidence...</span>
                         </div>
                         <div class="progress-dark-container">
-                            <div id="loadingProgress" class="progress-bar-gradient" style="width: 30%;"></div>
+                            <div id="loadingProgress" class="progress-bar-gradient" style="width: 45%; background: linear-gradient(90deg, #38bdf8 0%, #6366f1 100%);"></div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Results Dashboard Section -->
-        <div id="results" style="display: none;">
+        <!-- FULL RESULTS DASHBOARD (Visible directly on submission) -->
+        <div id="results" class="animate-fade-in" style="display: none;">
             
-            <!-- Hero Verdict Card -->
-            <div class="glass-card p-4 p-md-5 mb-4 position-relative overflow-hidden" id="verdictHeroCard">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 mb-4 mb-lg-0">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <span class="text-uppercase tracking-wider fw-bold text-secondary small" style="font-size: 0.75rem; letter-spacing: 1px;">System Unified Verdict</span>
-                            <div id="predictionBadge"></div>
+            <!-- SECTION 1: EXECUTIVE GRAPHIC VERDICT CARD -->
+            <div class="glass-card p-4 p-md-5 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <span class="text-uppercase tracking-wider fw-bold text-secondary small d-flex align-items-center gap-2" style="letter-spacing: 1.2px; font-size: 0.8rem;">
+                        <i class="fas fa-square-check text-cyan fs-6" style="color: #38bdf8;"></i> EXECUTIVE VERDICT & FACTUAL SUMMARY
+                    </span>
+                    <div id="predictionBadge"></div>
+                </div>
+
+                <!-- Submitted Claim Quote Box -->
+                <div class="p-4 rounded-4 bg-dark border border-secondary mb-4 position-relative shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="text-secondary fw-extrabold text-uppercase" style="font-size: 0.74rem; letter-spacing: 1px;">SUBMITTED CLAIM:</span>
+                        <span class="badge bg-secondary text-light px-2.5 py-1" style="font-size: 0.72rem;">User Query</span>
+                    </div>
+                    <div class="fw-bold text-white italic" id="submittedClaimDisplay" style="font-size: 1.15rem; line-height: 1.6; font-family: 'Outfit', sans-serif;"></div>
+                </div>
+
+                <div class="row align-items-center g-4 mb-3">
+                    <div class="col-lg-7">
+                        <h5 class="fw-bold text-white mb-2" style="font-family: 'Outfit', sans-serif;">Assessment Rationale</h5>
+                        <p class="text-secondary mb-3" id="verdictReason" style="font-size: 1.04rem; line-height: 1.65;"></p>
+
+                        <!-- True vs. Fake Graphical Risk Meters -->
+                        <div class="glass-panel p-3.5">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-bold text-success d-flex align-items-center gap-1.5"><i class="fas fa-shield-check"></i> Evidence Alignment Score</span>
+                                <span class="small fw-extrabold text-white" id="trueProbValue">100%</span>
+                            </div>
+                            <div class="progress bg-black-50 mb-3" style="height: 9px; border-radius: 999px;">
+                                <div id="trueProbBar" class="progress-bar bg-success" style="width: 100%; border-radius: 999px;"></div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-bold text-danger d-flex align-items-center gap-1.5"><i class="fas fa-triangle-exclamation"></i> Unverified / Contradiction Risk</span>
+                                <span class="small fw-extrabold text-white" id="fakeProbValue">0%</span>
+                            </div>
+                            <div class="progress bg-black-50" style="height: 9px; border-radius: 999px;">
+                                <div id="fakeProbBar" class="progress-bar bg-danger" style="width: 0%; border-radius: 999px;"></div>
+                            </div>
                         </div>
-                        <h2 class="h2 fw-bold text-white mb-2" id="verdictHeadline" style="font-family: 'Outfit', sans-serif;"></h2>
-                        <p class="text-secondary mb-0 leading-relaxed" id="verdictReason" style="font-size: 1.05rem;"></p>
+                    </div>
+
+                    <!-- Right Column: SVG Circular Progress Ring Gauge & Sources Count -->
+                    <div class="col-lg-5 text-center border-start-lg border-secondary ps-lg-4">
+                        <div class="d-flex flex-column align-items-center justify-content-center p-3">
+                            <span class="text-secondary small fw-extrabold text-uppercase mb-3" style="letter-spacing: 0.8px;">Verification Confidence</span>
+                            
+                            <div class="svg-ring-container mb-3">
+                                <svg width="120" height="120" viewBox="0 0 100 100">
+                                    <defs>
+                                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#38bdf8"/>
+                                            <stop offset="100%" stop-color="#10b981"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <circle class="svg-ring-circle-bg" cx="50" cy="50" r="45"></circle>
+                                    <circle id="svgRingVal" class="svg-ring-circle-val" cx="50" cy="50" r="45"></circle>
+                                </svg>
+                                <span class="position-absolute h3 fw-extrabold text-white mb-0" id="confidenceValue">0%</span>
+                            </div>
+
+                            <div class="d-inline-flex align-items-center gap-2 px-3.5 py-1.5 rounded-pill bg-dark border border-secondary text-secondary">
+                                <i class="fas fa-newspaper text-cyan" style="color: #38bdf8;"></i>
+                                <span id="sourcesCountBadge" class="fw-bold text-light small">0 sources reviewed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 Evidence Graphic Metric Cards -->
+                <div class="row g-3 mt-4 pt-3 border-top border-secondary">
+                    <div class="col-md-4">
+                        <div class="metric-card metric-card-success h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="text-success small fw-extrabold text-uppercase" style="letter-spacing: 0.8px;">Supporting Evidence</span>
+                                <i class="fas fa-circle-check text-success fs-5"></i>
+                            </div>
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span id="summarySuppCount" class="display-6 fw-extrabold text-white">0</span>
+                                <span class="text-secondary small">sources</span>
+                            </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.78rem;">Direct factual corroboration</small>
+                        </div>
                     </div>
                     
-                    <div class="col-lg-5 border-start-lg border-secondary ps-lg-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="fw-semibold text-light">Overall System Confidence</span>
-                            <span class="fw-bold fs-4 text-white" id="confidenceValue" style="font-family: 'Space Grotesk', sans-serif;"></span>
-                        </div>
-                        <div class="progress-dark-container mb-3">
-                            <div id="confidenceBar" class="progress-bar-gradient" style="width: 0%;"></div>
-                        </div>
-                        
-                        <div class="row text-center g-2">
-                            <div class="col-6">
-                                <div class="p-3 rounded-3 bg-dark border border-secondary">
-                                    <small class="d-block fw-semibold mb-1" style="color: #f43f5e; font-size: 0.8rem;">Fake Risk Score</small>
-                                    <span id="fakeProbText" class="fw-bold fs-4 text-white" style="font-family: 'Space Grotesk', sans-serif;"></span>
-                                </div>
+                    <div class="col-md-4">
+                        <div class="metric-card metric-card-danger h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="text-danger small fw-extrabold text-uppercase" style="letter-spacing: 0.8px;">Contradicting Evidence</span>
+                                <i class="fas fa-circle-xmark text-danger fs-5"></i>
                             </div>
-                            <div class="col-6">
-                                <div class="p-3 rounded-3 bg-dark border border-secondary">
-                                    <small class="d-block fw-semibold mb-1" style="color: #10b981; font-size: 0.8rem;">True Credibility Score</small>
-                                    <span id="trueProbText" class="fw-bold fs-4 text-white" style="font-family: 'Space Grotesk', sans-serif;"></span>
-                                </div>
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span id="summaryContCount" class="display-6 fw-extrabold text-white">0</span>
+                                <span class="text-secondary small">sources</span>
                             </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.78rem;">Direct factual refutation</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="metric-card metric-card-warning h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="text-warning small fw-extrabold text-uppercase" style="letter-spacing: 0.8px;">Inconclusive Evidence</span>
+                                <i class="fas fa-circle-minus text-warning fs-5"></i>
+                            </div>
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span id="summaryNeuCount" class="display-6 fw-extrabold text-white">0</span>
+                                <span class="text-secondary small">sources</span>
+                            </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.78rem;">Contextual web reports</small>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Two-Column Grid: Live Web Intelligence + AI Feature Analysis -->
+            <!-- SECTION 2: TWO-COLUMN DASHBOARD GRID (Retrieved Evidence + Atomic Breakdown) -->
             <div class="row g-4 mb-4">
                 
-                <!-- Live Web Evidence Card -->
-                <div class="col-lg-6">
+                <!-- Left Column: Retrieved Web Evidence -->
+                <div class="col-lg-7">
                     <div class="glass-card p-4 h-100">
-                        <h4 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
-                            <i class="fas fa-globe text-cyan" style="color: #38bdf8;"></i>
-                            Real-Time Live Web Evidence
-                        </h4>
-                        <div id="liveStatusContainer" class="mb-3"></div>
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                            <h4 class="h5 fw-bold text-white mb-0 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                                <i class="fas fa-globe text-cyan" style="color: #38bdf8;"></i>
+                                Live Retrieved Web Evidence
+                            </h4>
+                            <span class="text-secondary small">Real-time press cross-referencing</span>
+                        </div>
+                        
                         <div id="liveSourcesContainer"></div>
                     </div>
                 </div>
 
-                <!-- AI Linguistic Analysis Card -->
-                <div class="col-lg-6">
+                <!-- Right Column: Atomic Claim Breakdown -->
+                <div class="col-lg-5">
                     <div class="glass-card p-4 h-100">
-                        <h4 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
-                            <i class="fas fa-brain text-purple" style="color: #818cf8;"></i>
-                            AI Feature Impact Analysis
-                        </h4>
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <h4 class="h5 fw-bold text-white mb-0 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                                <i class="fas fa-sitemap text-cyan" style="color: #38bdf8;"></i>
+                                Claim Breakdown
+                            </h4>
+                            <span class="text-secondary small">Atomic propositions</span>
+                        </div>
                         <p class="text-secondary small mb-3">
-                            Key words and linguistic weights evaluated by the machine learning model:
+                            Individual sub-statements evaluated independently against press evidence:
                         </p>
-                        <div id="topFeaturesContainer"></div>
+
+                        <div id="atomicClaimsContainer"></div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Interactive SHAP Chart Card -->
-            <div class="glass-card p-4 mb-5">
-                <h4 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
-                    <i class="fas fa-chart-bar text-emerald" style="color: #10b981;"></i>
-                    Linguistic Risk vs Real News Style (SHAP Analysis)
+            <!-- SECTION 3: EXPLAINABLE AI & SHAP ATTRIBUTION SECTION (WORLD-CLASS DESIGN) -->
+            <div class="glass-card p-4 p-md-5 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                    <h4 class="h5 fw-bold text-white mb-0 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                        <i class="fas fa-brain text-cyan" style="color: #38bdf8;"></i>
+                        Explainable AI & SHAP Feature Attribution
+                    </h4>
+                    <span class="badge bg-dark border border-secondary text-secondary px-3 py-1.5 rounded-pill small">
+                        <i class="fas fa-microchip text-cyan me-1.5" style="color: #38bdf8;"></i>SHAP Model Weights
+                    </span>
+                </div>
+                <p class="text-secondary small mb-4">
+                    Interactive token attribution analysis revealing vocabulary and linguistic features that influence model predictions.
+                </p>
+
+                <!-- Modern AI Token Heatmap Card (Seamless Paragraph Layout) -->
+                <div class="p-4 rounded-4 bg-dark border border-secondary mb-4 position-relative">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 pb-2 border-bottom border-secondary-subtle">
+                        <span class="text-secondary small fw-extrabold text-uppercase d-flex align-items-center gap-2" style="letter-spacing: 0.8px;">
+                            <i class="fas fa-highlighter text-cyan" style="color: #38bdf8;"></i> INTERACTIVE CLAIM TOKEN ATTRIBUTION
+                        </span>
+                        <div class="d-flex align-items-center gap-3 small" style="font-size: 0.78rem;">
+                            <span class="d-inline-flex align-items-center gap-1.5 text-success fw-semibold"><i class="fas fa-square" style="color: #10b981;"></i> Pushes toward verified news style</span>
+                            <span class="d-inline-flex align-items-center gap-1.5 text-danger fw-semibold"><i class="fas fa-square" style="color: #f43f5e;"></i> Pushes toward unverified style</span>
+                        </div>
+                    </div>
+                    
+                    <div id="shapHeatmapText" class="p-4 rounded-3 bg-black-50 border border-secondary text-light lh-lg" style="font-size: 1.15rem; line-height: 2.2;">
+                        <!-- Rendered by JS -->
+                    </div>
+                    
+                    <div class="d-flex align-items-center gap-2 mt-3 pt-2 text-secondary small" style="font-size: 0.82rem;">
+                        <i class="fas fa-circle-info text-cyan" style="color: #38bdf8;"></i>
+                        <span>Hover over any highlighted token to inspect its exact SHAP attribution value.</span>
+                    </div>
+                </div>
+
+                <!-- Journalistic Style Indicator & Dual Model Terms Breakdown -->
+                <div class="row g-4 mb-4">
+                    <!-- Journalistic Style Gauge -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="p-4 rounded-4 bg-dark border border-secondary h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-secondary small fw-extrabold text-uppercase" style="letter-spacing: 0.6px;">
+                                        Journalistic Style Index
+                                    </span>
+                                    <i class="fas fa-circle-question text-secondary" style="font-size: 0.85rem;" data-bs-toggle="tooltip" title="Evaluates language conventions against formal news reporting standards."></i>
+                                </div>
+                                <div class="d-flex align-items-baseline gap-2 mb-1">
+                                    <h3 id="linguisticScoreValue" class="display-5 fw-extrabold text-white mb-0">--%</h3>
+                                </div>
+                                <span id="linguisticScoreBadge" class="badge bg-secondary mb-3 px-3 py-1.5 fs-6" style="font-size: 0.8rem;">Analyzing Tone...</span>
+                            </div>
+                            <div>
+                                <div class="progress bg-black-50 border border-secondary mb-2" style="height: 10px; border-radius: 999px;">
+                                    <div id="linguisticProgressBar" class="progress-bar bg-success" style="width: 0%; border-radius: 999px;"></div>
+                                </div>
+                                <small class="text-secondary d-block" style="font-size: 0.78rem;">
+                                    Writing style indicator based on extracted linguistic feature patterns.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Positive Model Contributions -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="p-4 rounded-4 bg-dark border border-secondary h-100">
+                            <span class="text-success small fw-extrabold text-uppercase d-block mb-3 d-flex align-items-center gap-1.5" style="letter-spacing: 0.6px;">
+                                <i class="fas fa-arrow-up-right-dots"></i> Verified Style Indicators
+                            </span>
+                            <div id="positiveTermsList" class="d-flex flex-column gap-2">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Negative Model Contributions -->
+                    <div class="col-lg-4 col-md-12">
+                        <div class="p-4 rounded-4 bg-dark border border-secondary h-100">
+                            <span class="text-danger small fw-extrabold text-uppercase d-block mb-3 d-flex align-items-center gap-1.5" style="letter-spacing: 0.6px;">
+                                <i class="fas fa-arrow-down-right-dots"></i> Unverified Style Risk Indicators
+                            </span>
+                            <div id="negativeTermsList" class="d-flex flex-column gap-2">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plotly Feature Contributions Chart Container -->
+                <div class="p-4 rounded-4 bg-dark border border-secondary">
+                    <h6 class="fw-bold text-white mb-3 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                        <i class="fas fa-chart-bar text-cyan" style="color: #38bdf8;"></i> Feature Contributions to Model Prediction
+                    </h6>
+                    <div id="shapChart" style="min-height: 340px;"></div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: METHODOLOGY GRAPHIC GRID -->
+            <div class="glass-card p-4 p-md-5 mb-4">
+                <h4 class="h5 fw-bold text-white mb-3" style="font-family: 'Outfit', sans-serif;">
+                    <i class="fas fa-book-bookmark text-cyan me-2" style="color: #38bdf8;"></i>
+                    Verification Methodology
                 </h4>
-                <div id="shapChart" style="min-height: 360px;"></div>
-                <div class="mt-3 p-3 rounded-3 bg-dark border border-secondary">
-                    <small class="text-secondary d-block" style="font-size: 0.85rem; line-height: 1.6;">
-                        <i class="fas fa-circle-info text-cyan me-1" style="color: #38bdf8;"></i>
-                        <strong>How to read this chart:</strong>
-                        <br>• <strong>Green Bars (►)</strong>: Words reflecting standard formal news style.
-                        <br>• <strong>Red Bars (◄)</strong>: Words like <em>"free"</em> or <em>"give"</em> that carry promotional risk in general language models.
-                        <br>• <strong>Verification Note</strong>: Even when promotional words trigger red risk bars, our <strong>Real-Time Live Web Checker</strong> cross-references live news outlets to verify if the announcement is 100% genuine real news!
-                    </small>
+                <p class="text-secondary mb-4" style="font-size: 0.98rem;">
+                    VeriAI investigates claims using multi-stage web evidence retrieval and logical proposition grounding.
+                </p>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-4 rounded-4 bg-dark border border-secondary h-100">
+                            <div class="d-flex align-items-center gap-2.5 mb-2">
+                                <span class="badge bg-primary-subtle text-primary rounded-circle fw-extrabold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
+                                <h6 class="fw-bold text-white mb-0">Query Generation</h6>
+                            </div>
+                            <p class="text-secondary small mb-0" style="font-size: 0.86rem; line-height: 1.55;">
+                                Formulates search queries preserving full semantic claim context.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-4 rounded-4 bg-dark border border-secondary h-100">
+                            <div class="d-flex align-items-center gap-2.5 mb-2">
+                                <span class="badge bg-primary-subtle text-primary rounded-circle fw-extrabold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">2</span>
+                                <h6 class="fw-bold text-white mb-0">Live Evidence Search</h6>
+                            </div>
+                            <p class="text-secondary small mb-0" style="font-size: 0.86rem; line-height: 1.55;">
+                                Collects live press articles across trusted global web sources.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-4 rounded-4 bg-dark border border-secondary h-100">
+                            <div class="d-flex align-items-center gap-2.5 mb-2">
+                                <span class="badge bg-primary-subtle text-primary rounded-circle fw-extrabold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span>
+                                <h6 class="fw-bold text-white mb-0">Atomic Grounding</h6>
+                            </div>
+                            <p class="text-secondary small mb-0" style="font-size: 0.86rem; line-height: 1.55;">
+                                Decomposes claims into atomic statements, cross-checking facts & dates.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-4 rounded-4 bg-dark border border-secondary h-100">
+                            <div class="d-flex align-items-center gap-2.5 mb-2">
+                                <span class="badge bg-primary-subtle text-primary rounded-circle fw-extrabold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">4</span>
+                                <h6 class="fw-bold text-white mb-0">Transparent Synthesis</h6>
+                            </div>
+                            <p class="text-secondary small mb-0" style="font-size: 0.86rem; line-height: 1.55;">
+                                Combines evidence alignment with SHAP feature models into a clear verdict.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- Preset Test Claims Grid -->
+        <!-- Sample Claim Presets Card -->
         <div class="glass-card p-4 p-md-5">
-            <h5 class="fw-bold text-white mb-4 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
-                <i class="fas fa-flask text-cyan" style="color: #38bdf8;"></i>
-                Test Trending Presets in One Click
+            <h5 class="fw-bold text-white mb-2 d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
+                <i class="fas fa-lightbulb text-cyan" style="color: #38bdf8;"></i>
+                Try a Sample Claim
             </h5>
+            <p class="text-secondary small mb-4">Click any preset claim below to quickly populate the input text field:</p>
             
             <div class="row g-3">
                 <div class="col-md-3 col-sm-6">
-                    <div class="preset-chip example-card" style="cursor: pointer;">
-                        <span class="badge bg-success-subtle text-success border border-success mb-2" style="font-size: 0.75rem;">Cricket Real News</span>
-                        <h6 class="text-white small fw-bold mb-1">Ajinkya Rahane Retirement</h6>
-                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"Ajinkya Rahane has taken retirment from all from of cricket today"</p>
+                    <div class="preset-chip example-card">
+                        <span class="badge bg-primary-subtle text-primary border border-primary mb-2.5" style="font-size: 0.74rem;">Sports</span>
+                        <h6 class="text-white small fw-bold mb-1">Cricket Retirement Claim</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.84rem;">"Ajinkya Rahane announced retirement from international cricket"</p>
                     </div>
                 </div>
                 
                 <div class="col-md-3 col-sm-6">
-                    <div class="preset-chip example-card" style="cursor: pointer;">
-                        <span class="badge bg-danger-subtle text-danger border border-danger mb-2" style="font-size: 0.75rem;">Brand Entity Scam</span>
-                        <h6 class="text-white small fw-bold mb-1">Airtel Gemini Pro Offer</h6>
-                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"Airtel to give free gemini pro for 1 year"</p>
+                    <div class="preset-chip example-card">
+                        <span class="badge bg-info-subtle text-info border border-info mb-2.5" style="font-size: 0.74rem;">Business</span>
+                        <h6 class="text-white small fw-bold mb-1">Company Acquisition</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.84rem;">"Elon Musk acquired Twitter for $44 billion in 2022"</p>
                     </div>
                 </div>
 
                 <div class="col-md-3 col-sm-6">
-                    <div class="preset-chip example-card" style="cursor: pointer;">
-                        <span class="badge bg-success-subtle text-success border border-success mb-2" style="font-size: 0.75rem;">Movie Release Real</span>
-                        <h6 class="text-white small fw-bold mb-1">Adarsha Kutumbam Date</h6>
-                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"Adarsha kutumbam to be realsed on oct 2"</p>
+                    <div class="preset-chip example-card">
+                        <span class="badge bg-purple-subtle text-purple border border-purple mb-2.5" style="font-size: 0.74rem; color: #a855f7;">Entertainment</span>
+                        <h6 class="text-white small fw-bold mb-1">Film Award Event</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.84rem;">"Christopher Nolan wins Academy Award for Best Director"</p>
                     </div>
                 </div>
 
                 <div class="col-md-3 col-sm-6">
-                    <div class="preset-chip example-card" style="cursor: pointer;">
-                        <span class="badge bg-danger-subtle text-danger border border-danger mb-2" style="font-size: 0.75rem;">Fake Deal Rumor</span>
-                        <h6 class="text-white small fw-bold mb-1">Amazon Buys Flipkart</h6>
-                        <p class="text-secondary small mb-0" style="font-size: 0.8rem;">"amazon to buy Flipkart"</p>
+                    <div class="preset-chip example-card">
+                        <span class="badge bg-success-subtle text-success border border-success mb-2.5" style="font-size: 0.74rem;">Public Affairs</span>
+                        <h6 class="text-white small fw-bold mb-1">Executive Leadership</h6>
+                        <p class="text-secondary small mb-0" style="font-size: 0.84rem;">"Satya Nadella is the current CEO of Microsoft"</p>
                     </div>
                 </div>
             </div>
@@ -219,6 +468,12 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Enable Bootstrap Tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
     const form = document.getElementById('newsForm');
     const textArea = document.getElementById('newsText');
     const analyzeBtn = document.getElementById('analyzeBtn');
@@ -250,28 +505,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle Form Submit with Animated Progress Sequence
+    // Handle Form Submit
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const text = textArea.value.trim();
         if (!text) {
-            alert('Please enter a headline or article text to analyze.');
+            alert('Please enter a headline or claim text to analyze.');
             return;
         }
 
-        // Show loading and progress sequence
+        // Show fast loading state
         analyzeBtn.disabled = true;
         loading.style.display = 'block';
         results.style.display = 'none';
         
-        loadingProgress.style.width = '30%';
-        stepText.textContent = 'Scanning 50,000+ Live Web RSS Outlets...';
+        loadingProgress.style.width = '45%';
+        stepText.textContent = 'Gathering live web evidence & press coverage...';
 
         setTimeout(() => {
-            loadingProgress.style.width = '70%';
-            stepText.textContent = 'Cross-checking Subject Entity & Date Consistency...';
-        }, 800);
+            loadingProgress.style.width = '80%';
+            stepText.textContent = 'Synthesizing evidence assessment & SHAP feature map...';
+        }, 600);
 
         try {
             const response = await fetch('/predict', {
@@ -285,20 +540,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             loadingProgress.style.width = '100%';
-            stepText.textContent = 'Computing SHAP Feature Contributions...';
+            stepText.textContent = 'Assessment complete!';
 
             setTimeout(() => {
                 if (response.ok) {
-                    displayResults(data);
+                    displayResults(data, text);
                 } else {
-                    alert('Error: ' + data.error);
+                    alert('Error: ' + (data.error || 'Failed to verify claim'));
                 }
                 analyzeBtn.disabled = false;
                 loading.style.display = 'none';
-            }, 400);
+            }, 300);
 
         } catch (error) {
-            alert('An error occurred: ' + error.message);
+            alert('An error occurred while connecting to server: ' + error.message);
             analyzeBtn.disabled = false;
             loading.style.display = 'none';
         }
@@ -310,172 +565,282 @@ document.addEventListener('DOMContentLoaded', function() {
         results.style.display = 'none';
     });
 
+    // Sample claim click handles
     exampleCards.forEach(card => {
         card.addEventListener('click', function() {
             const pText = this.querySelector('p').textContent.replace(/^"|"$/g, '');
             textArea.value = pText;
             charCounter.textContent = pText.length + ' characters';
             textArea.focus();
-            form.dispatchEvent(new Event('submit'));
         });
     });
 
-    function displayResults(data) {
+    function displayResults(data, submittedText) {
         const fc = data.live_fact_check || {};
-        const vState = fc.verdict_state || 'UNVERIFIED';
-        const vColor = fc.verdict_color || 'secondary';
+        const vState = fc.verdict_state || data.verdict_state || 'UNVERIFIED';
 
-        // 1. Dynamic Verdict Badge Styling
+        // 1. Submitted Claim Display
+        document.getElementById('submittedClaimDisplay').textContent = `"${submittedText}"`;
+
+        // 2. Verdict Badge & Colors
         const badgeElem = document.getElementById('predictionBadge');
         let badgeIcon = 'fa-circle-question';
-        let badgeClass = 'bg-secondary border-secondary text-white';
-        let badgeStyle = 'background: rgba(100, 116, 139, 0.2); color: #cbd5e1; border: 1px solid rgba(100, 116, 139, 0.4);';
+        let badgeStyle = 'background: rgba(100, 116, 139, 0.2); color: #cbd5e1; border: 1px solid rgba(100, 116, 139, 0.4); box-shadow: 0 0 20px rgba(100, 116, 139, 0.2);';
+        let ringColor = '#94a3b8';
 
         if (vState === 'VERIFIED' || vState === 'SUPPORTED') {
             badgeIcon = 'fa-circle-check';
-            badgeStyle = 'background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);';
+            badgeStyle = 'background: rgba(16, 185, 129, 0.22); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.6); box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);';
+            ringColor = 'url(#ringGrad)';
         } else if (vState === 'PARTIALLY_SUPPORTED') {
             badgeIcon = 'fa-circle-half-stroke';
-            badgeStyle = 'background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4);';
+            badgeStyle = 'background: rgba(245, 158, 11, 0.22); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.6); box-shadow: 0 0 30px rgba(245, 158, 11, 0.35);';
+            ringColor = '#f59e0b';
         } else if (vState === 'CONTRADICTED') {
             badgeIcon = 'fa-triangle-exclamation';
-            badgeStyle = 'background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4);';
+            badgeStyle = 'background: rgba(244, 63, 94, 0.22); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.6); box-shadow: 0 0 30px rgba(244, 63, 94, 0.35);';
+            ringColor = '#f43f5e';
         } else if (vState === 'CONFLICTING') {
             badgeIcon = 'fa-scale-unbalanced';
-            badgeStyle = 'background: rgba(249, 115, 22, 0.2); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.4);';
+            badgeStyle = 'background: rgba(249, 115, 22, 0.22); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.6); box-shadow: 0 0 30px rgba(249, 115, 22, 0.35);';
+            ringColor = '#f97316';
         }
 
-        badgeElem.className = 'px-3 py-2 rounded-pill fw-bold small d-inline-flex align-items-center gap-2';
+        badgeElem.className = 'px-4 py-2 rounded-pill fw-extrabold small d-inline-flex align-items-center gap-2 fs-6';
         badgeElem.setAttribute('style', badgeStyle);
-        badgeElem.innerHTML = `<i class="fas ${badgeIcon}"></i> ${fc.verdict || data.prediction}`;
+        badgeElem.innerHTML = `<i class="fas ${badgeIcon}"></i> ${fc.verdict || data.verdict || data.prediction}`;
 
-        document.getElementById('verdictHeadline').textContent = fc.verdict || 'Verification Completed';
-        document.getElementById('verdictReason').textContent = data.verdict_reason || fc.summary || '';
+        document.getElementById('verdictReason').textContent = fc.reasoning_summary || fc.summary || data.verdict_reason || 'No detailed assessment reasoning provided.';
 
-        // 2. Confidence Meter
-        document.getElementById('confidenceValue').textContent = data.confidence + '%';
-        const confidenceBar = document.getElementById('confidenceBar');
-        confidenceBar.style.width = data.confidence + '%';
-        confidenceBar.style.background = (vState === 'VERIFIED' || vState === 'SUPPORTED')
-            ? 'linear-gradient(90deg, #10b981 0%, #059669 100%)'
-            : (vState === 'CONTRADICTED' ? 'linear-gradient(90deg, #f43f5e 0%, #e11d48 100%)' : 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)');
+        // 3. Confidence & SVG Ring Gauge
+        const confVal = data.confidence || fc.confidence || 0.0;
+        document.getElementById('confidenceValue').textContent = confVal + '%';
+        
+        const svgRing = document.getElementById('svgRingVal');
+        if (svgRing) {
+            svgRing.style.stroke = ringColor;
+            const offset = 283 - (283 * confVal / 100);
+            svgRing.style.strokeDashoffset = offset;
+        }
 
-        document.getElementById('fakeProbText').textContent = data.probabilities.fake + '%';
-        document.getElementById('trueProbText').textContent = data.probabilities.true + '%';
+        // True vs Fake Probabilities Risk Bar
+        const probs = data.probabilities || {};
+        const trueP = probs.true !== undefined ? probs.true : (confVal);
+        const fakeP = probs.fake !== undefined ? probs.fake : (100 - confVal);
 
-        // 3. Multi-Stage Evidence Verification Panel
-        const liveStatus = document.getElementById('liveStatusContainer');
+        document.getElementById('trueProbValue').textContent = trueP + '%';
+        document.getElementById('trueProbBar').style.width = trueP + '%';
+
+        document.getElementById('fakeProbValue').textContent = fakeP + '%';
+        document.getElementById('fakeProbBar').style.width = fakeP + '%';
+
+        const sourcesList = fc.sources || [];
+        document.getElementById('sourcesCountBadge').textContent = `${sourcesList.length} sources reviewed`;
+
+        // 4. Evidence Counters
+        const supportingEv = fc.supporting_evidence || [];
+        const contradictingEv = fc.contradicting_evidence || [];
+        const neutralEv = fc.neutral_evidence || [];
+
+        const suppCount = supportingEv.length || sourcesList.filter(s => s.source_classification === 'RELEVANT_SUPPORT').length;
+        const contCount = contradictingEv.length || sourcesList.filter(s => s.source_classification === 'RELEVANT_CONTRADICTION').length;
+        const neuCount = neutralEv.length || Math.max(0, sourcesList.length - suppCount - contCount);
+
+        document.getElementById('summarySuppCount').textContent = suppCount;
+        document.getElementById('summaryContCount').textContent = contCount;
+        document.getElementById('summaryNeuCount').textContent = neuCount;
+
+        // 5. Render Retrieved Evidence List
         const liveSources = document.getElementById('liveSourcesContainer');
+        if (sourcesList.length > 0) {
+            let sourcesHtml = '<div class="d-flex flex-column gap-3">';
+            sourcesList.forEach(s => {
+                const srcId = s.source_id || '';
+                const isSupp = supportingEv.some(e => e.source_id === srcId) || s.source_classification === 'RELEVANT_SUPPORT';
+                const isCont = contradictingEv.some(e => e.source_id === srcId) || s.source_classification === 'RELEVANT_CONTRADICTION';
 
-        const comps = fc.claim_components || {};
-        const checks = fc.consistency_checks || {};
-        const corrob = fc.source_corroboration || {};
-
-        let statusHtml = `
-            <div class="p-3 rounded-4 bg-dark border border-secondary mb-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-secondary small fw-bold text-uppercase" style="letter-spacing: 0.5px;">Claim Decomposition & Consistency Checks</span>
-                    <small class="text-cyan" style="font-size: 0.75rem;"><i class="fas fa-search me-1"></i>Query: "${fc.query_used || ''}"</small>
-                </div>
-
-                <div class="row g-2 mb-3 text-white small">
-                    <div class="col-6">
-                        <span class="text-secondary d-block" style="font-size: 0.75rem;">Subject Entities</span>
-                        <strong class="text-light">${(comps.entities && comps.entities.length) ? comps.entities.join(', ') : 'None specified'}</strong>
-                    </div>
-                    <div class="col-6">
-                        <span class="text-secondary d-block" style="font-size: 0.75rem;">Dates / Time</span>
-                        <strong class="text-light">${(comps.dates && comps.dates.length) ? comps.dates.join(', ') : 'None specified'}</strong>
-                    </div>
-                    <div class="col-6">
-                        <span class="text-secondary d-block" style="font-size: 0.75rem;">Numbers / Amount</span>
-                        <strong class="text-light">${(comps.numbers && comps.numbers.length) ? comps.numbers.join(', ') : 'None specified'}</strong>
-                    </div>
-                    <div class="col-6">
-                        <span class="text-secondary d-block" style="font-size: 0.75rem;">Event Classification</span>
-                        <strong class="text-cyan text-capitalize">${comps.event_type || 'general_claim'}</strong>
-                    </div>
-                </div>
-
-                <div class="d-flex flex-wrap gap-2 pt-2 border-top border-secondary">
-                    <span class="badge ${checks.entity_consistency === 'MATCH' ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning'}" style="font-size: 0.72rem;">
-                        Entity Check: ${checks.entity_consistency || 'N/A'}
-                    </span>
-                    <span class="badge ${checks.temporal_consistency === 'MATCH' ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning'}" style="font-size: 0.72rem;">
-                        Temporal Check: ${checks.temporal_consistency || 'N/A'}
-                    </span>
-                    <span class="badge ${checks.numerical_consistency === 'MATCH' ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning'}" style="font-size: 0.72rem;">
-                        Numerical Check: ${checks.numerical_consistency || 'N/A'}
-                    </span>
-                    <span class="badge bg-dark text-secondary border border-secondary" style="font-size: 0.72rem;">
-                        Sources Evaluated: ${corrob.independent_sources_count || 0} (${corrob.syndicated_copies_detected || 0} syndicated)
-                    </span>
-                </div>
-            </div>
-        `;
-        liveStatus.innerHTML = statusHtml;
-
-        // Render Evidence Cards with NLI status
-        const allSources = fc.sources || [];
-        if (allSources.length > 0) {
-            let sourcesHtml = '<div class="d-flex flex-column gap-2">';
-            allSources.forEach(s => {
-                const nliVerdict = (s.nli && s.nli.nli_verdict) ? s.nli.nli_verdict : 'NEUTRAL';
-                let nliBadge = '<span class="badge bg-secondary text-light">NEUTRAL</span>';
-                if (nliVerdict === 'ENTAILMENT') nliBadge = '<span class="badge bg-success text-white"><i class="fas fa-check me-1"></i>ENTAILMENT</span>';
-                else if (nliVerdict === 'PARTIAL_SUPPORT') nliBadge = '<span class="badge bg-warning text-dark"><i class="fas fa-circle-half-stroke me-1"></i>PARTIAL SUPPORT</span>';
-                else if (nliVerdict === 'CONTRADICTION') nliBadge = '<span class="badge bg-danger text-white"><i class="fas fa-xmark me-1"></i>CONTRADICTION</span>';
+                let classBadge = '<span class="badge bg-secondary text-light"><i class="fas fa-circle-info me-1"></i>Contextual</span>';
+                if (isSupp) classBadge = '<span class="badge bg-success text-white"><i class="fas fa-check me-1"></i>Direct Support</span>';
+                else if (isCont) classBadge = '<span class="badge bg-danger text-white"><i class="fas fa-xmark me-1"></i>Contradiction</span>';
 
                 sourcesHtml += `
-                    <a href="${s.url}" target="_blank" class="source-hover-card p-3 rounded-3 bg-dark border border-secondary text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="fw-bold text-white small text-truncate" style="max-width: 70%;">${s.title}</span>
+                    <div class="source-hover-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                            <span class="fw-bold text-white text-truncate" style="max-width: 72%; font-size: 1rem; font-family: 'Outfit', sans-serif;">${s.title}</span>
                             <div class="d-flex align-items-center gap-2">
-                                ${nliBadge}
-                                <span class="badge bg-dark border border-secondary text-secondary" style="font-size: 0.7rem;">${s.source}</span>
+                                ${classBadge}
+                                <span class="badge bg-dark border border-secondary text-secondary" style="font-size: 0.74rem;">${s.publisher || 'Web Press'}</span>
                             </div>
                         </div>
-                        ${s.snippet ? `<p class="text-secondary mb-1 small" style="font-size: 0.8rem;">${s.snippet}</p>` : ''}
-                        ${s.content_accessible ? `<div class="p-2 rounded bg-black-50 text-secondary border border-secondary small mt-1" style="font-size: 0.75rem;"><i class="fas fa-file-lines me-1 text-cyan"></i><strong>Article Extract:</strong> "${s.content.slice(0, 150)}..."</div>` : ''}
-                    </a>
+                        ${s.snippet ? `<p class="text-secondary mb-3 small" style="font-size: 0.88rem; line-height: 1.6;">${s.snippet}</p>` : ''}
+                        <div class="d-flex justify-content-between align-items-center pt-2.5 border-top border-secondary-subtle">
+                            <span class="text-muted small" style="font-size: 0.78rem;"><i class="far fa-clock me-1.5"></i>${s.published_at || 'Recent publication'}</span>
+                            <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-cyan rounded-pill px-3.5 py-1 fw-bold" style="font-size: 0.78rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.45);">
+                                Explore Press Article <i class="fas fa-arrow-up-right-from-square ms-1" style="font-size: 0.7rem;"></i>
+                            </a>
+                        </div>
+                    </div>
                 `;
             });
             sourcesHtml += '</div>';
             liveSources.innerHTML = sourcesHtml;
         } else {
-            liveSources.innerHTML = '<p class="text-secondary small mt-2">No official press reports or fact-check records found across verified news outlets for this claim.</p>';
+            liveSources.innerHTML = '<div class="p-3.5 rounded-3 bg-dark border border-secondary text-secondary small"><i class="fas fa-info-circle me-1"></i>No public press reports or fact-check records retrieved for this claim.</div>';
         }
 
-        // 4. Top Feature Pills
-        const topFeatures = document.getElementById('topFeaturesContainer');
-        if (data.explanation && data.explanation.length > 0) {
-            let featuresHtml = '';
-            data.explanation.slice(0, 6).forEach(([feature, importance]) => {
-                const isPositive = importance > 0;
-                featuresHtml += `
-                    <div class="feature-pill-card ${isPositive ? 'feature-pill-card-true' : 'feature-pill-card-fake'}">
-                        <span>${feature}</span>
-                        <span class="fw-bold">${importance > 0 ? '+' : ''}${importance.toFixed(4)}</span>
+        // 6. Render Atomic Claim Breakdown
+        const atomicClaims = fc.atomic_claims || [];
+        const atomicContainer = document.getElementById('atomicClaimsContainer');
+        if (atomicClaims.length > 0) {
+            let atomicHtml = '<div class="d-flex flex-column gap-3">';
+            atomicClaims.forEach(ac => {
+                let stBadge = '<span class="badge bg-secondary">UNVERIFIED</span>';
+                if (ac.status === 'SUPPORTED' || ac.status === 'ENTAILED') stBadge = '<span class="badge bg-success"><i class="fas fa-check me-1"></i>SUPPORTED</span>';
+                else if (ac.status === 'CONTRADICTED') stBadge = '<span class="badge bg-danger"><i class="fas fa-xmark me-1"></i>CONTRADICTED</span>';
+                else if (ac.status === 'PARTIAL') stBadge = '<span class="badge bg-warning text-dark">PARTIAL</span>';
+
+                atomicHtml += `
+                    <div class="p-3.5 rounded-3 bg-dark border border-secondary">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                            <span class="fw-bold text-light" style="font-size: 0.96rem;">${ac.claim}</span>
+                            ${stBadge}
+                        </div>
+                        ${ac.reason ? `<p class="text-secondary mb-0 small" style="font-size: 0.86rem; line-height: 1.55;">${ac.reason}</p>` : ''}
                     </div>
                 `;
             });
-            topFeatures.innerHTML = featuresHtml;
+            atomicHtml += '</div>';
+            atomicContainer.innerHTML = atomicHtml;
         } else {
-            topFeatures.innerHTML = '<p class="text-secondary small">No strong single-word features extracted.</p>';
+            atomicContainer.innerHTML = '<div class="p-3.5 rounded-3 bg-dark border border-secondary text-secondary small"><i class="fas fa-info-circle me-1"></i>Claim evaluated as a single unified proposition.</div>';
         }
 
-        // 5. Plotly SHAP Chart
+        // 7. Render Modern Interactive SHAP Token Heatmap
+        const sa = data.shap_analysis || {};
+        const wordScores = sa.word_scores || {};
+        
+        const heatmapContainer = document.getElementById('shapHeatmapText');
+        if (submittedText) {
+            const rawWords = submittedText.split(/\s+/);
+            const heatmapTokens = rawWords.map(rawWord => {
+                const cleanWord = rawWord.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const score = wordScores[cleanWord] || 0.0;
+                
+                if (score > 0.01) {
+                    return `<span class="shap-token-pos" data-bs-toggle="tooltip" title="Positive attribution: +${score.toFixed(3)} (Pushes prediction toward verified style)">${rawWord}<span class="shap-score-tag bg-success-subtle text-success">+${score.toFixed(2)}</span></span>`;
+                } else if (score < -0.01) {
+                    return `<span class="shap-token-neg" data-bs-toggle="tooltip" title="Negative attribution: ${score.toFixed(3)} (Pushes prediction toward unverified style)">${rawWord}<span class="shap-score-tag bg-danger-subtle text-danger">${score.toFixed(2)}</span></span>`;
+                } else {
+                    return `<span class="shap-token-neutral">${rawWord}</span>`;
+                }
+            });
+            heatmapContainer.innerHTML = heatmapTokens.join(' ');
+            
+            // Re-initialize tooltips for new dynamic tokens
+            const newTooltips = [].slice.call(heatmapContainer.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            newTooltips.map(el => new bootstrap.Tooltip(el));
+        }
+
+        // Render Journalistic Style Score
+        const lingScore = sa.linguistic_score || 75.0;
+        document.getElementById('linguisticScoreValue').textContent = lingScore + '%';
+        const scoreBar = document.getElementById('linguisticProgressBar');
+        scoreBar.style.width = lingScore + '%';
+        
+        const scoreBadge = document.getElementById('linguisticScoreBadge');
+        if (lingScore >= 75) {
+            scoreBadge.className = 'badge bg-success-subtle text-success border border-success mb-2 px-3 py-1.5 fs-6';
+            scoreBadge.textContent = 'Formal Journalistic Tone';
+            scoreBar.className = 'progress-bar bg-success';
+        } else if (lingScore >= 55) {
+            scoreBadge.className = 'badge bg-info-subtle text-info border border-info mb-2 px-3 py-1.5 fs-6';
+            scoreBadge.textContent = 'Standard Reporting Tone';
+            scoreBar.className = 'progress-bar bg-info';
+        } else {
+            scoreBadge.className = 'badge bg-warning-subtle text-warning border border-warning mb-2 px-3 py-1.5 fs-6';
+            scoreBadge.textContent = 'Informal / Sensational Tone';
+            scoreBar.className = 'progress-bar bg-warning';
+        }
+
+        // Render Positive & Negative Terms Lists with Progress Gauges
+        const posList = document.getElementById('positiveTermsList');
+        const negList = document.getElementById('negativeTermsList');
+        const posTerms = sa.positive_terms || [];
+        const negTerms = sa.negative_terms || [];
+
+        if (posTerms.length > 0) {
+            posList.innerHTML = posTerms.map(t => {
+                const pct = Math.min(100, Math.max(10, Math.abs(t.impact) * 200));
+                return `
+                    <div class="p-2.5 rounded-3 bg-black-50 border border-success-subtle">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="text-light fw-bold small">${t.word}</span>
+                            <span class="badge bg-success-subtle text-success border border-success" style="font-family: 'JetBrains Mono', monospace;">+${t.impact.toFixed(3)}</span>
+                        </div>
+                        <div class="progress bg-dark" style="height: 5px; border-radius: 999px;">
+                            <div class="progress-bar bg-success" style="width: ${pct}%; border-radius: 999px;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            posList.innerHTML = `
+                <div class="p-3.5 rounded-3 bg-black-50 border border-secondary text-secondary text-center">
+                    <i class="fas fa-balance-scale text-cyan me-1.5"></i>
+                    <span class="small fw-semibold">Standard baseline vocabulary format.</span>
+                </div>
+            `;
+        }
+
+        if (negTerms.length > 0) {
+            negList.innerHTML = negTerms.map(t => {
+                const pct = Math.min(100, Math.max(10, Math.abs(t.impact) * 200));
+                return `
+                    <div class="p-2.5 rounded-3 bg-black-50 border border-danger-subtle">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="text-light fw-bold small">${t.word}</span>
+                            <span class="badge bg-danger-subtle text-danger border border-danger" style="font-family: 'JetBrains Mono', monospace;">${t.impact.toFixed(3)}</span>
+                        </div>
+                        <div class="progress bg-dark" style="height: 5px; border-radius: 999px;">
+                            <div class="progress-bar bg-danger" style="width: ${pct}%; border-radius: 999px;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            negList.innerHTML = `
+                <div class="p-3.5 rounded-3 bg-black-50 border border-secondary text-secondary text-center">
+                    <i class="fas fa-shield-check text-success me-1.5"></i>
+                    <span class="small fw-semibold">No high-risk sensational terms detected.</span>
+                </div>
+            `;
+        }
+
+        // Render Plotly SHAP Waterfall Chart
         if (data.chart) {
-            const chartData = JSON.parse(data.chart);
-            chartData.layout.paper_bgcolor = 'rgba(0,0,0,0)';
-            chartData.layout.plot_bgcolor = 'rgba(0,0,0,0)';
-            chartData.layout.font = { color: '#94a3b8', family: 'Plus Jakarta Sans' };
-            chartData.layout.xaxis = { gridcolor: 'rgba(255,255,255,0.08)' };
-            chartData.layout.yaxis = { gridcolor: 'rgba(255,255,255,0.08)' };
-            Plotly.newPlot('shapChart', chartData.data, chartData.layout, {responsive: true, displayModeBar: false});
+            try {
+                const chartData = JSON.parse(data.chart);
+                chartData.layout.paper_bgcolor = 'rgba(0,0,0,0)';
+                chartData.layout.plot_bgcolor = 'rgba(0,0,0,0)';
+                chartData.layout.font = { color: '#f8fafc', family: 'Plus Jakarta Sans' };
+                chartData.layout.xaxis = { gridcolor: 'rgba(255,255,255,0.08)' };
+                chartData.layout.yaxis = { gridcolor: 'rgba(255,255,255,0.08)' };
+                
+                // Colorize bars with glowing cyan-green vs rose gradients
+                if (chartData.data && chartData.data[0]) {
+                    const vals = chartData.data[0].x || [];
+                    chartData.data[0].marker = {
+                        color: vals.map(v => v >= 0 ? '#10b981' : '#f43f5e'),
+                        opacity: 0.85
+                    };
+                }
+                Plotly.newPlot('shapChart', chartData.data, chartData.layout, {responsive: true, displayModeBar: false});
+            } catch (err) {
+                console.error("Plotly chart parse error:", err);
+            }
         }
 
-        // Show Results smoothly
+        // Show Results Dashboard smoothly
         results.style.display = 'block';
         results.scrollIntoView({ behavior: 'smooth' });
     }
